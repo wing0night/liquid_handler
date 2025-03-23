@@ -6,7 +6,7 @@ repo for the software part of my graduate design
 
 ### software
 
-function achieved and in developing
+function achieved and in development
 
 - [x] CAN connection and CAN original message send
 - [x] drive and control TeCan pump
