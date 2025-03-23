@@ -11,11 +11,13 @@ CONFIG += c++17
 SOURCES += \
     canthread.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    pwmcontroller.cpp
 
 HEADERS += \
     canthread.h \
-    mainwindow.h
+    mainwindow.h \
+    pwmcontroller.h
 
 FORMS += \
     mainwindow.ui

@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include "canthread.h"
 
+#include "pwmcontroller.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -24,6 +26,10 @@ public slots:
     void onGetProtocolData(VCI_CAN_OBJ *vci,unsigned int dwRel,unsigned int channel);
 
     void onBoardInfo(VCI_BOARD_INFO vbi);
+
+    // unsigned char* into_ascii(char* mystr);
+
+    // void send_msg_and_print_command(QStringList mystr, unsigned int pre_str);
 
 private slots:
 
@@ -46,8 +52,19 @@ private slots:
 
     void on_pro_debug_reset_clicked();
 
+    void on_pushButton_clicked();
+
+    // void on_pushButton_5_clicked();
+
+    void on_test_pwm_start_clicked();
+
+    void on_test_pwm_stop_clicked();
+
+    void updateCanLog(quint32 id, unsigned char* data, int dlc, bool isTx);
+
 private:
     Ui::MainWindow *ui;
     CANThread *canthread;
+    PwmController m_pwm;  // PWM 控制器实例
 };
 #endif // MAINWINDOW_H
