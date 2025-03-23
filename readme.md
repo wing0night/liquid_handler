@@ -4,6 +4,14 @@ repo for the software part of my graduate design
 
 ### hardware
 
+| name      | version |
+| ----------- | ----------- |
+| RK3566      | firefly RK3566 ROC PC   |
+| USB-CAN Communicator   |         |
+|Stepper Motor Driver| microstep driver HB-415M |
+|Stepper Motor||
+|Pump| Tecan xx |
+
 ### software
 
 function achieved and in development
