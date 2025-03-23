@@ -1,6 +1,6 @@
 ## intro
 
-repo for the software part of my graduate design
+The repo of the QT program for the software part of my graduate design
 
 ### hardware
 
