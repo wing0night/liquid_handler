@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <cstring>
 #include <QTextStream>
+#include <cmath>
 
 // 字节转两位十六进制字符串（大写）
 QString MainWindow::byteToHex(quint8 byte) {
@@ -52,6 +53,34 @@ QList<int> calculateStepperTimeSegments(const QString& input) {
     return results;
 }
 
+
+// the double t is the period of 0->3000
+QList<int> calculateTecanTimeSegments(const QString& input, double t) {
+    QList<int> result;
+    QStringList segments = input.split('#', Qt::SkipEmptyParts);
+    QRegularExpression re("(?<=[PD])(-?\\d+)"); // 匹配 P/D 后的数字
+
+    for (const QString& segment : segments) {
+        int iCount = segment.count('I'); // 统计 I 的数量
+
+        // 计算 P/D 后的数字之和
+        int sumPD = 0;
+        QRegularExpressionMatchIterator it = re.globalMatch(segment);
+        while (it.hasNext()) {
+            QRegularExpressionMatch match = it.next();
+            bool ok;
+            int num = match.captured(1).toInt(&ok);
+            if (ok) sumPD += num;
+        }
+
+        // 计算时间并向下取整
+        double time = (sumPD / 3000.0) * t + iCount * 1000;
+        result.append(static_cast<int>(floor(time)));
+    }
+
+    return result;
+}
+
 // merge delay time, create tecan command
 QString merge_stepper_time(const QVector<int>& stepper_time, QString& tecan_str) {
     // 步骤1：记录所有M的位置
@@ -91,6 +120,148 @@ QStringList splitStringEvery8Chars(QString &input) {
     }
 
     return result;
+}
+
+
+// move stepper in L, D, U, R directions
+void MainWindow::moveStepper(const QString &input) {
+    QString currentValue;
+    QChar currentCommand;
+    bool readingNumber = false;
+
+    for (int i = 0; i < input.length(); ++i) {
+        QChar c = input[i];
+
+        // 检测到新指令头
+        if (c == 'U' || c == 'R' || c == 'D' || c == 'L') {
+            if (!currentCommand.isNull()) {
+                // 输出上一个指令
+                qDebug() << currentCommand << currentValue;
+            }
+            unsigned int index = (c=='U')?0:(c=='R')?1:(c=='D')?2:(c=='L')?3:4;
+
+            // read a full command
+            switch (index) {
+            case '0':{
+                // move up
+                // assume up dir controlled by m_gpio_high
+                // motor in the vertical dir controlled by m_pwm
+                if (!m_gpio.SetHigh()) {
+                    QMessageBox::warning(this, "错误", "Up dir control failed");
+                }
+                //pwm set
+                unsigned int duty = 500000;// set duty to be fixed 500000 when activated
+                unsigned int period = 1000000;// set period to be fixed 500000 when activated
+                if (!m_pwm.setPeriod(period) || !m_pwm.setDutyCycle(duty)) {
+                    QMessageBox::warning(this, "错误", "Up参数设置失败");
+                    return;
+                }
+                // 3. 启用 PWM
+                if (!m_pwm.enable()) {
+                    QMessageBox::warning(this, "错误", "启用 Up PWM 失败");
+                }
+                // start delay
+                QThread::msleep(currentValue.toInt());
+                if (!m_pwm.disable()) {
+                    QMessageBox::warning(this, "错误", "close Up PWM 失败");
+                }
+                break;
+            }
+            case '1':{
+                // move right
+                // assume up dir controlled by m_gpio_2_high
+                // motor in the vertical dir controlled by m_pwm_2
+                if (!m_gpio.SetHigh()) {
+                    QMessageBox::warning(this, "错误", "Right dir control failed");
+                }
+                //pwm set
+                unsigned int duty = 500000;// set duty to be fixed 500000 when activated
+                unsigned int period = 1000000;// set period to be fixed 500000 when activated
+                if (!m_pwm_2.setPeriod(period) || !m_pwm_2.setDutyCycle(duty)) {
+                    QMessageBox::warning(this, "错误", "Right参数设置失败");
+                    return;
+                }
+                // 3. 启用 PWM
+                if (!m_pwm_2.enable()) {
+                    QMessageBox::warning(this, "错误", "启用 Right PWM 失败");
+                }
+                // start delay
+                QThread::msleep(currentValue.toInt());
+                if (!m_pwm_2.disable()) {
+                    QMessageBox::warning(this, "错误", "Right close PWM 失败");
+                }
+                break;
+            }
+            case '2':{
+                // move down
+                // assume up dir controlled by m_gpio_low
+                // motor in the vertical dir controlled by m_pwm
+                if (!m_gpio.SetLow()) {
+                    QMessageBox::warning(this, "错误", "Down dir control failed");
+                }
+                //pwm set
+                unsigned int duty = 500000;// set duty to be fixed 500000 when activated
+                unsigned int period = 1000000;// set period to be fixed 500000 when activated
+                if (!m_pwm.setPeriod(period) || !m_pwm.setDutyCycle(duty)) {
+                    QMessageBox::warning(this, "错误", "Down参数设置失败");
+                    return;
+                }
+                // 3. 启用 PWM
+                if (!m_pwm.enable()) {
+                    QMessageBox::warning(this, "错误", "启用 Down PWM 失败");
+                }
+                // start delay
+                QThread::msleep(currentValue.toInt());
+                if (!m_pwm.disable()) {
+                    QMessageBox::warning(this, "错误", "close Down PWM 失败");
+                }
+                break;
+            }
+            case '3':{
+                // move left
+                // assume up dir controlled by m_gpio_2_low
+                // motor in the vertical dir controlled by m_pwm_2
+                if (!m_gpio.SetLow()) {
+                    QMessageBox::warning(this, "错误", "Left dir control failed");
+                }
+                //pwm set
+                unsigned int duty = 500000;// set duty to be fixed 500000 when activated
+                unsigned int period = 1000000;// set period to be fixed 500000 when activated
+                if (!m_pwm_2.setPeriod(period) || !m_pwm_2.setDutyCycle(duty)) {
+                    QMessageBox::warning(this, "错误", "Left参数设置失败");
+                    return;
+                }
+                // 3. 启用 PWM
+                if (!m_pwm_2.enable()) {
+                    QMessageBox::warning(this, "错误", "启用 Left PWM 失败");
+                }
+                // start delay
+                QThread::msleep(currentValue.toInt());
+                if (!m_pwm_2.disable()) {
+                    QMessageBox::warning(this, "错误", "Left close PWM 失败");
+                }
+                break;
+            }
+
+                currentCommand = c;
+                currentValue.clear();
+                readingNumber = true;
+            }
+        }
+        // 读取数字部分
+        else if (readingNumber && c.isDigit()) {
+            currentValue.append(c);
+        }
+        // 遇到非数字字符时结束读取
+        else {
+            readingNumber = false;
+        }
+    }
+
+    // 输出最后一个指令
+    if (!currentCommand.isNull()) {
+        qDebug() << currentCommand << currentValue;
+    }
 }
 
 MainWindow::MainWindow(QWidget *parent)
@@ -417,7 +588,7 @@ void MainWindow::on_test_pwm_start_clicked()
 {
     // 1. 初始化 PWM
     if (!m_pwm.initPwm()) {
-        QMessageBox::critical(this, "错误", "PWM 初始化失败！");
+        QMessageBox::warning(this, "错误", "PWM 初始化失败！");
         return;
     }
 
@@ -436,13 +607,13 @@ void MainWindow::on_test_pwm_start_clicked()
     }
 
     if (!m_pwm.setPeriod(period) || !m_pwm.setDutyCycle(duty)) {
-        QMessageBox::critical(this, "错误", "参数设置失败");
+        QMessageBox::warning(this, "错误", "参数设置失败");
         return;
     }
 
     // 3. 启用 PWM
     if (!m_pwm.enable()) {
-        QMessageBox::critical(this, "错误", "启用 PWM 失败");
+        QMessageBox::warning(this, "错误", "启用 PWM 失败");
     }
 }
 
@@ -450,7 +621,7 @@ void MainWindow::on_test_pwm_start_clicked()
 void MainWindow::on_test_pwm_stop_clicked()
 {
     if (!m_pwm.disable()) {
-        QMessageBox::critical(this, "错误", "关闭 PWM 失败");
+        QMessageBox::warning(this, "错误", "关闭 PWM 失败");
     }
 }
 
@@ -458,21 +629,21 @@ void MainWindow::on_test_pwm_stop_clicked()
 void MainWindow::on_pushButton_14_clicked()
 {
     if (!m_gpio.initGpio()) {
-        QMessageBox::critical(this, "错误", "direction gpio 初始化失败！");
+        QMessageBox::warning(this, "错误", "direction gpio 初始化失败！");
         return;
     }
     if (!m_gpio.setDir("out")) {
-        QMessageBox::critical(this, "错误", "set pin output mode failed");
+        QMessageBox::warning(this, "错误", "set pin output mode failed");
         return;
     }
     if(ui->comboBox_3->currentIndex() == 0){ // dir forward
         if (!m_gpio.SetHigh()) {
-            QMessageBox::critical(this, "错误", "dir control failed");
+            QMessageBox::warning(this, "错误", "dir control failed");
         }
     }
     else{ // dir inverse
         if (!m_gpio.SetLow()) {
-            QMessageBox::critical(this, "错误", "dir control failed");
+            QMessageBox::warning(this, "错误", "dir control failed");
         }
     }
 }
@@ -511,6 +682,7 @@ void MainWindow::on_pushButton_15_clicked()
     QString tecan_str = results.result1;
     QString stepper_str = results.result2;
     QList<int> stepper_time = calculateStepperTimeSegments(stepper_str); // calculate time cost by steppers
+    QList<int> tecan_time = calculateTecanTimeSegments(tecan_str, 1970); // 0~3000 is 1970ms=1.97s for [S5]
     QVector<int> vector_stepper_time = QVector<int>::fromList(stepper_time);
     // calculate time costs by tecan
 
@@ -519,6 +691,9 @@ void MainWindow::on_pushButton_15_clicked()
     QStringList tecan_commands = splitStringEvery8Chars(merged_str);
     send_tecan_command(tecan_commands);
 
+    //impelement pwm & direction signal send in this function
+    // form of stepper_str I1A3000I3A0MI2A3000I3A0R
+    sendStepperCommand(stepper_str, tecan_time);
 
 }
 
@@ -651,6 +826,75 @@ void MainWindow::send_tecan_command(QStringList command){
         {updateCanLog(257, data, dlc, true);        }
         else
             QMessageBox::warning(this,"警告","数据发送失败！");
+    }
+}
+
+// control stepper motor
+void MainWindow::sendStepperCommand(const QString& input, QList<int> tecan_time) {
+    //next for insert time after M
+    // positions of M
+    QVector<int> m_positions;
+    for (int i = 0; i < input.size(); ++i) {
+        if (input[i] == 'M') {
+            m_positions.append(i);
+        }
+    }
+    // insert data after M
+    QString merged_str = input;
+    for (int i = m_positions.size() - 1; i >= 0; --i) {
+        const int insert_pos = m_positions[i] + 1; // 在M后面插入
+        const QString num_str = QString::number(tecan_time[i]);
+        merged_str.insert(insert_pos, num_str);
+    }
+
+    // 1. 分割字符串为以M开头的段
+    QList<int> m_positions_2;
+    int pos = 0;
+    while ((pos = merged_str.indexOf('M', pos)) != -1) {
+        m_positions_2.append(pos);
+        pos++; // 跳过当前M继续查找
+    }
+    if (m_positions_2.isEmpty()) {
+        moveStepper(merged_str);
+        return;
+    }
+
+    // 2. 提取所有M字段段
+    QStringList segments;
+    for (int i = 0; i < m_positions_2.size(); ++i) {
+        int start = m_positions_2[i];
+        int end = (i < m_positions_2.size()-1) ? m_positions_2[i+1] : merged_str.length();
+        segments.append(merged_str.mid(start, end - start));
+    }
+
+
+
+    // 3. 处理每个段
+    QRegularExpression re("^M(\\d+)(.*)");
+    foreach (const QString& seg, segments) {
+        QRegularExpressionMatch match = re.match(seg);
+        if (match.hasMatch()) {
+            // 解析延时时间
+            bool ok;
+            int delay = match.captured(1).toInt(&ok);
+            if (!ok) {
+                qWarning() << "无效的延时数值:" << seg;
+                continue;
+            }
+
+            // 获取剩余字段
+            QString remaining = match.captured(2);
+
+            // 执行延时（控制台程序可用，GUI程序需改用QTimer）
+            qDebug() << "开始延时" << delay << "ms";
+            QThread::msleep(delay);
+
+            // execute剩余字段
+            moveStepper(remaining);
+            qDebug() << "剩余字段:" << remaining;
+        } else {
+            qWarning() << "字段格式错误:" << seg;
+        }
     }
 }
 

@@ -43,6 +43,8 @@ public slots:
 
     ProcessResults processString(const QString &input);// for command string process
 
+    void moveStepper(const QString &input);
+
 private slots:
 
     void on_motor_comboBox_currentTextChanged(const QString &arg1);
@@ -79,11 +81,14 @@ private slots:
     void on_pushButton_15_clicked();
 
     void send_tecan_command(QStringList command);
+    void sendStepperCommand(const QString& input, QList<int> tecan_time);
 
 private:
     Ui::MainWindow *ui;
     CANThread *canthread;
     PwmController m_pwm;  // PWM 控制器实例
     GpioController m_gpio; // control gpio
+    PwmController m_pwm_2 {3, 0};  //
+    GpioController m_gpio_2 {147}; // gpio4_C3
 };
 #endif // MAINWINDOW_H
