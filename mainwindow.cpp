@@ -10,7 +10,6 @@
 QString MainWindow::byteToHex(quint8 byte) {
     return QString("%1").arg(byte, 2, 16, QChar('0')).toUpper();
 }
-
 // 原始数据转十六进制字符串（空格分隔）
 QString MainWindow::rawDataToHex(const QByteArray &data) {
     QString hexStr;
@@ -21,12 +20,77 @@ QString MainWindow::rawDataToHex(const QByteArray &data) {
     qDebug() << "Hex Data: " << hexStr.trimmed();
     return hexStr.trimmed(); // 移除末尾空格
 }
-
 // 字符串转 ASCII 字节数组（Latin-1 编码保证单字节）
 QByteArray MainWindow::intoAscii(const QString &input) {
     QByteArray data = input.toLatin1(); // 转换为单字节编码
     qDebug() << "ASCII Data:" << data; // 调试输出
     return data;
+}
+
+QList<int> calculateStepperTimeSegments(const QString& input) {
+    QList<int> results;
+
+    // 1. 按'M'分割字符串（自动跳过空段）
+    QStringList segments = input.split('M', Qt::SkipEmptyParts);
+
+    // 正则表达式匹配数字部分
+    QRegularExpression re("\\d+");
+
+    foreach (const QString& segment, segments) {
+        int sum = 0;
+
+        // 2. 在每段中查找所有数字
+        QRegularExpressionMatchIterator it = re.globalMatch(segment);
+        while (it.hasNext()) {
+            QRegularExpressionMatch match = it.next();
+            sum += match.captured(0).toInt(); // 转换为数字并累加
+        }
+
+        results.append(sum);
+    }
+
+    return results;
+}
+
+// merge delay time, create tecan command
+QString merge_stepper_time(const QVector<int>& stepper_time, QString& tecan_str) {
+    // 步骤1：记录所有M的位置
+    QVector<int> m_positions;
+    for (int i = 0; i < tecan_str.size(); ++i) {
+        if (tecan_str[i] == 'M') {
+            m_positions.append(i);
+        }
+    }
+
+    // 步骤2：校验M数量与数组大小一致
+    if (m_positions.size() != stepper_time.size()) {
+        throw std::invalid_argument("M字符数量与数组长度不匹配");
+    }
+
+    // 步骤3：从后往前插入数据
+    QString merged_str = tecan_str;
+    for (int i = m_positions.size() - 1; i >= 0; --i) {
+        const int insert_pos = m_positions[i] + 1; // 在M后面插入
+        const QString num_str = QString::number(stepper_time[i]);
+        merged_str.insert(insert_pos, num_str);
+    }
+
+    return merged_str;
+}
+
+// split tecan command into pieces of 8 characters
+QStringList splitStringEvery8Chars(QString &input) {
+    QStringList result;
+    const int chunkSize = 8;
+
+    for (int i = 0; i < input.length(); i += chunkSize) {
+        // 计算当前块的结束位置
+        int endPos = qMin(i + chunkSize, input.length());
+        // 截取子字符串并添加到结果列表
+        result.append(input.mid(i, endPos - i));
+    }
+
+    return result;
 }
 
 MainWindow::MainWindow(QWidget *parent)
@@ -204,7 +268,6 @@ void MainWindow::on_pro_debug_send_clicked()
     }
     // 1. 获取输入并转换为 ASCII 字节数组
     QByteArray bytes = intoAscii(ui->pro_debug_data->text());
-
     // 2. 转换为十六进制字符串
     QString hexResult = rawDataToHex(bytes);
 
@@ -216,12 +279,11 @@ void MainWindow::on_pro_debug_send_clicked()
     for(int i = 0;i < dlc;i ++)
         data[i] = strList.at(i).toInt(0,16);
     quint32 id = QVariant(ui->pro_debug_ID->text().toInt(0,16)).toUInt();
-    if(canthread->sendData(QVariant(ui->pro_debug_combo_frame1->currentIndex()).toUInt(),
+    if(canthread->sendData(0,
                             QVariant(ui->pro_debug_ID->text().toInt(0,16)).toUInt(),
                             ui->pro_debug_combo_frame2->currentIndex(),
                             ui->pro_debug_combo_frame1->currentIndex(),
                             data,dlc))
-
     // update log
     {updateCanLog(id, data, dlc, true);    }
     else
@@ -349,55 +411,6 @@ void MainWindow::on_pushButton_clicked()
     canthread->start();
 }
 
-// void MainWindow::send_msg_and_print_command(QStringList mystr, unsigned int pre_str){
-//     unsigned char data[8];
-//     memset(data,0,8);
-//     UINT dlc = 0;
-//     dlc = mystr.count() > 8 ? 8 : mystr.count();
-//     for(int i = 0;i < dlc;i ++)
-//         data[i] = mystr.at(i).toInt(0,16);
-//     if(canthread->sendData(0,
-//                             pre_str,
-//                             0,
-//                             0,
-//                             data,dlc))
-//     {//发送成功，打印数据
-//         QStringList messageList;
-
-//         messageList.clear();
-//         messageList << QTime::currentTime().toString("hh:mm:ss zzz");//时间
-//         messageList << "无";//时间
-//         messageList << "无";//时间
-//         messageList << "CH" + QString::number(QVariant(ui->pro_debug_combo_channel->currentIndex()).toUInt());
-//         messageList << "发送";//收发
-//         messageList << "0x" + ui->pro_debug_ID->text().toUpper();//ID
-//         messageList << ((ui->pro_debug_combo_frame2->currentIndex() == 0) ? "数据帧" : "远程帧");//类型
-//         messageList << ((ui->pro_debug_combo_frame1->currentIndex() == 0) ? "标准帧" : "扩展帧");//Frame
-//         QString str = "";
-//         if(ui->pro_debug_combo_frame2->currentIndex() == 0)//数据帧显示数据
-//         {
-//             messageList << "0x" + QString::number(dlc,16).toUpper();//长度
-//             str = "x| ";
-//             for(int j = 0;j < dlc;j ++)
-//                 str += QString("%1 ").arg((unsigned char)data[j],2,16,QChar('0')).toUpper();//QString::number((unsigned char)data[j],16) + " ";
-//         }
-//         else
-//             messageList << "0x0";//长度
-//         messageList << str;//数据
-//         AddDataToList(messageList);
-//     }
-//     else
-//         QMessageBox::warning(this,"警告","数据发送失败！");
-// }
-
-
-
-
-// void MainWindow::on_pushButton_5_clicked()
-// {
-//     QStringList strList = ui->lineEdit_3->text().split(" ");
-//     send_msg_and_print_command(strList, 0101);
-// }
 
 
 void MainWindow::on_test_pwm_start_clicked()
@@ -463,4 +476,183 @@ void MainWindow::on_pushButton_14_clicked()
         }
     }
 }
+
+ProcessResults MainWindow::processString(const QString &input)
+{
+    ProcessResults results;
+
+    // 处理第一个字符串
+    QStringList parts1 = input.split('%', Qt::SkipEmptyParts);
+    for (const QString &part : parts1) {
+        int hashIndex = part.indexOf('#');
+        results.result1 += (hashIndex != -1) ? part.left(hashIndex) + "M" : part;
+    }
+
+    // 处理第二个字符串
+    QStringList parts2 = input.split('#', Qt::SkipEmptyParts);
+    for (int i = 1; i < parts2.size(); ++i) {
+        int percentIndex = parts2[i].indexOf('%');
+        results.result2 += (percentIndex != -1) ? parts2[i].left(percentIndex) + "M" : parts2[i];
+    }
+
+    return results;
+}
+
+
+void MainWindow::on_pushButton_15_clicked()
+{
+    // 获取输入
+    QString input = ui->lineEdit_7->text().trimmed();  // 去除首尾空格
+    if (input.isEmpty()) {
+        QMessageBox::warning(this, "错误", "输入不能为空！");
+        return;
+    }
+    ProcessResults results = processString(input);
+    QString tecan_str = results.result1;
+    QString stepper_str = results.result2;
+    QList<int> stepper_time = calculateStepperTimeSegments(stepper_str); // calculate time cost by steppers
+    QVector<int> vector_stepper_time = QVector<int>::fromList(stepper_time);
+    // calculate time costs by tecan
+
+    // migrate, devide tecan commands and send
+    QString merged_str = merge_stepper_time(vector_stepper_time, tecan_str);
+    QStringList tecan_commands = splitStringEvery8Chars(merged_str);
+    send_tecan_command(tecan_commands);
+
+
+}
+
+
+
+void MainWindow::send_tecan_command(QStringList command){
+    unsigned int num = command.size();
+    if(num == 1){
+        QByteArray bytes = command[0].toLatin1();
+        // 2. 转换为十六进制字符串
+        QString hexResult = rawDataToHex(bytes);
+
+        QStringList strList = hexResult.split(" ");
+        unsigned char data[8];
+        memset(data,0,8);
+        UINT dlc = 0;
+        dlc = strList.count() > 8 ? 8 : strList.count();
+        for(int i = 0;i < dlc;i ++)
+            data[i] = strList.at(i).toInt(0,16);
+        if(canthread->sendData(0,
+                                257, // 0x0101
+                                0,
+                                0,
+                                data,dlc))
+        // update log
+        {updateCanLog(257, data, dlc, true);    }
+        else
+            QMessageBox::warning(this,"警告","数据发送失败！");
+    }
+    else if(num == 2){
+        QByteArray bytes0 = command[0].toLatin1();
+        QString hexResult0 = rawDataToHex(bytes0);
+        QByteArray bytes1 = command[1].toLatin1();
+        QString hexResult1 = rawDataToHex(bytes1);
+
+        QStringList strList0 = hexResult0.split(" ");
+        unsigned char data0[8];
+        memset(data0,0,8);
+        UINT dlc0 = 0;
+        dlc0 = strList0.count() > 8 ? 8 : strList0.count();
+        for(int i = 0;i < dlc0;i ++)
+            data0[i] = strList0.at(i).toInt(0,16);
+        if(canthread->sendData(0,
+                                259, // 0x0103, start multi-frame
+                                0,
+                                0,
+                                data0,dlc0))
+        // update log
+        {updateCanLog(259, data0, dlc0, true);    }
+        else
+            QMessageBox::warning(this,"警告","数据发送失败！");
+
+        QStringList strList1 = hexResult1.split(" ");
+        unsigned char data1[8];
+        memset(data1,0,8);
+        UINT dlc1 = 0;
+        dlc1 = strList1.count() > 8 ? 8 : strList1.count();
+        for(int i = 0;i < dlc1;i ++)
+            data1[i] = strList1.at(i).toInt(0,16);
+        if(canthread->sendData(0,
+                                257, // 0x0103, start multi-frame
+                                0,
+                                0,
+                                data1,dlc1))
+        // update log
+        {updateCanLog(257, data1, dlc1, true);    }
+        else
+            QMessageBox::warning(this,"警告","数据发送失败！");
+    }
+    else{
+        // general condition, frame amount >= 3
+        //start frame is the same
+        QByteArray bytes0 = command[0].toLatin1();
+        QString hexResult0 = rawDataToHex(bytes0);
+
+        QStringList strList0 = hexResult0.split(" ");
+        unsigned char data0[8];
+        memset(data0,0,8);
+        UINT dlc0 = 0;
+        dlc0 = strList0.count() > 8 ? 8 : strList0.count();
+        for(int i = 0;i < dlc0;i ++)
+            data0[i] = strList0.at(i).toInt(0,16);
+        if(canthread->sendData(0,
+                                259, // 0x0103, start multi-frame
+                                0,
+                                0,
+                                data0,dlc0))
+        // update log
+        {updateCanLog(259, data0, dlc0, true);    }
+        else
+            QMessageBox::warning(this,"警告","数据发送失败！");
+        for(unsigned int i=1; i<num-1; i++){
+            QByteArray bytes = command[i].toLatin1();
+            QString hexResult = rawDataToHex(bytes);
+
+            QStringList strList = hexResult.split(" ");
+            unsigned char data[8];
+            memset(data,0,8);
+            UINT dlc = 0;
+            dlc = strList.count() > 8 ? 8 : strList.count();
+            for(int i = 0;i < dlc;i ++)
+                data[i] = strList.at(i).toInt(0,16);
+            if(canthread->sendData(0,
+                                    260, // 0x0103, start multi-frame
+                                    0,
+                                    0,
+                                    data,dlc))
+            // update log
+            {updateCanLog(260, data, dlc, true);        }
+            else
+                QMessageBox::warning(this,"警告","数据发送失败！");
+        }
+        // last command: action command
+        QByteArray bytes = command[num-1].toLatin1();
+        QString hexResult = rawDataToHex(bytes);
+
+        QStringList strList = hexResult.split(" ");
+        unsigned char data[8];
+        memset(data,0,8);
+        UINT dlc = 0;
+        dlc = strList.count() > 8 ? 8 : strList.count();
+        for(int i = 0;i < dlc;i ++)
+            data[i] = strList.at(i).toInt(0,16);
+        if(canthread->sendData(0,
+                                257, // 0x0101, start multi-frame
+                                0,
+                                0,
+                                data,dlc))
+        // update log
+        {updateCanLog(257, data, dlc, true);        }
+        else
+            QMessageBox::warning(this,"警告","数据发送失败！");
+    }
+}
+
+
 

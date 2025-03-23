@@ -13,6 +13,12 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
+// 定义结果容器
+struct ProcessResults {
+    QString result1;
+    QString result2;
+};
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -34,6 +40,8 @@ public slots:
     QString byteToHex(quint8 byte);
     QString rawDataToHex(const QByteArray &data);
     QByteArray intoAscii(const QString &input);
+
+    ProcessResults processString(const QString &input);// for command string process
 
 private slots:
 
@@ -67,6 +75,10 @@ private slots:
     void updateCanLog(quint32 id, unsigned char* data, int dlc, bool isTx);
 
     void on_pushButton_14_clicked();
+
+    void on_pushButton_15_clicked();
+
+    void send_tecan_command(QStringList command);
 
 private:
     Ui::MainWindow *ui;

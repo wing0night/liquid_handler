@@ -1347,7 +1347,7 @@ color: rgb(255, 255, 255);</string>
         <rect>
          <x>10</x>
          <y>10</y>
-         <width>441</width>
+         <width>381</width>
          <height>291</height>
         </rect>
        </property>
@@ -1525,9 +1525,9 @@ color: rgb(255, 255, 255);</string>
       <widget class="QFrame" name="frame_21">
        <property name="geometry">
         <rect>
-         <x>460</x>
+         <x>400</x>
          <y>10</y>
-         <width>331</width>
+         <width>251</width>
          <height>291</height>
         </rect>
        </property>
@@ -1568,7 +1568,7 @@ color: rgb(255, 255, 255);</string>
          <rect>
           <x>26</x>
           <y>50</y>
-          <width>181</width>
+          <width>131</width>
           <height>221</height>
          </rect>
         </property>
@@ -1606,9 +1606,9 @@ color: rgb(255, 255, 255);</string>
        <widget class="QWidget" name="verticalLayoutWidget_2">
         <property name="geometry">
          <rect>
-          <x>190</x>
+          <x>160</x>
           <y>50</y>
-          <width>121</width>
+          <width>71</width>
           <height>221</height>
          </rect>
         </property>
@@ -1647,9 +1647,9 @@ color: rgb(255, 255, 255);</string>
       <widget class="QFrame" name="frame_22">
        <property name="geometry">
         <rect>
-         <x>800</x>
+         <x>660</x>
          <y>10</y>
-         <width>461</width>
+         <width>401</width>
          <height>291</height>
         </rect>
        </property>
@@ -1682,7 +1682,7 @@ color: rgb(255, 255, 255);</string>
          <string notr="true">color: rgb(0, 0, 0);</string>
         </property>
         <property name="text">
-         <string>Send data</string>
+         <string>CAN Send data</string>
         </property>
        </widget>
        <widget class="QLabel" name="label_22">
@@ -1761,8 +1761,8 @@ color: rgb(255, 255, 255);</string>
        <widget class="QComboBox" name="pro_debug_combo_frame2">
         <property name="geometry">
          <rect>
-          <x>250</x>
-          <y>100</y>
+          <x>40</x>
+          <y>140</y>
           <width>171</width>
           <height>29</height>
          </rect>
@@ -1782,7 +1782,7 @@ color: rgb(255, 255, 255);</string>
         <property name="geometry">
          <rect>
           <x>50</x>
-          <y>220</y>
+          <y>240</y>
           <width>141</width>
           <height>30</height>
          </rect>
@@ -1795,7 +1795,7 @@ color: rgb(255, 255, 255);</string>
         <property name="geometry">
          <rect>
           <x>50</x>
-          <y>160</y>
+          <y>190</y>
           <width>81</width>
           <height>21</height>
          </rect>
@@ -1818,7 +1818,7 @@ color: rgb(255, 255, 255);</string>
         <property name="geometry">
          <rect>
           <x>130</x>
-          <y>160</y>
+          <y>190</y>
           <width>141</width>
           <height>28</height>
          </rect>
@@ -1828,7 +1828,7 @@ color: rgb(255, 255, 255);</string>
       <widget class="QFrame" name="frame_37">
        <property name="geometry">
         <rect>
-         <x>1270</x>
+         <x>1070</x>
          <y>10</y>
          <width>331</width>
          <height>291</height>
@@ -1979,6 +1979,89 @@ color: rgb(255, 255, 255);</string>
         </property>
         <property name="text">
          <string>set direction</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QFrame" name="frame_16">
+       <property name="geometry">
+        <rect>
+         <x>1410</x>
+         <y>10</y>
+         <width>191</width>
+         <height>291</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(105, 105, 105);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <widget class="QLabel" name="label_80">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>20</y>
+          <width>111</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>14</pointsize>
+          <bold>true</bold>
+          <strikeout>false</strikeout>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(0, 0, 0);</string>
+        </property>
+        <property name="text">
+         <string>mixed test</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_37">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>60</y>
+          <width>131</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>input command</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineEdit_7">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>90</y>
+          <width>113</width>
+          <height>25</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_15">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>130</y>
+          <width>89</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>execute</string>
         </property>
        </widget>
       </widget>
