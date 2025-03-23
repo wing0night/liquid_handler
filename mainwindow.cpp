@@ -4,6 +4,30 @@
 #include <QMessageBox>
 #include <QDebug>
 #include <cstring>
+#include <QTextStream>
+
+// 字节转两位十六进制字符串（大写）
+QString MainWindow::byteToHex(quint8 byte) {
+    return QString("%1").arg(byte, 2, 16, QChar('0')).toUpper();
+}
+
+// 原始数据转十六进制字符串（空格分隔）
+QString MainWindow::rawDataToHex(const QByteArray &data) {
+    QString hexStr;
+    QTextStream stream(&hexStr);
+    for (auto byte : data) {
+        stream << byteToHex(static_cast<quint8>(byte)) << " ";
+    }
+    qDebug() << "Hex Data: " << hexStr.trimmed();
+    return hexStr.trimmed(); // 移除末尾空格
+}
+
+// 字符串转 ASCII 字节数组（Latin-1 编码保证单字节）
+QByteArray MainWindow::intoAscii(const QString &input) {
+    QByteArray data = input.toLatin1(); // 转换为单字节编码
+    qDebug() << "ASCII Data:" << data; // 调试输出
+    return data;
+}
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -178,7 +202,13 @@ void MainWindow::on_pro_debug_send_clicked()
             return;
         }
     }
-    QStringList strList = ui->pro_debug_data->text().split(" ");
+    // 1. 获取输入并转换为 ASCII 字节数组
+    QByteArray bytes = intoAscii(ui->pro_debug_data->text());
+
+    // 2. 转换为十六进制字符串
+    QString hexResult = rawDataToHex(bytes);
+
+    QStringList strList = hexResult.split(" ");
     unsigned char data[8];
     memset(data,0,8);
     UINT dlc = 0;

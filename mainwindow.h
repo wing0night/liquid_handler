@@ -31,6 +31,9 @@ public slots:
     // unsigned char* into_ascii(char* mystr);
 
     // void send_msg_and_print_command(QStringList mystr, unsigned int pre_str);
+    QString byteToHex(quint8 byte);
+    QString rawDataToHex(const QByteArray &data);
+    QByteArray intoAscii(const QString &input);
 
 private slots:
 
