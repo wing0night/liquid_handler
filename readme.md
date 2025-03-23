@@ -1,6 +1,6 @@
 ## intro
 
-The repo of the QT program for the software part of my graduate design
+The repo for the QT program, the software part of my graduate design
 
 ### hardware
 
@@ -19,7 +19,7 @@ function achieved and in development
 - [x] CAN connection and CAN original message send
 - [x] drive and control TeCan pump
 - [x] set RK3566 linux device tree, open pwm pins and control pwm in QT program
-- [ ] add button for convenient and easy use
+- [ ] add modules and buttons for convenient and easy use
 - [ ] write docs for setting the system
 
 a half-finished docs can be found here
