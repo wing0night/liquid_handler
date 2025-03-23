@@ -5,6 +5,7 @@
 #include "canthread.h"
 
 #include "pwmcontroller.h"
+#include "gpiocontroller.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -62,9 +63,12 @@ private slots:
 
     void updateCanLog(quint32 id, unsigned char* data, int dlc, bool isTx);
 
+    void on_pushButton_14_clicked();
+
 private:
     Ui::MainWindow *ui;
     CANThread *canthread;
     PwmController m_pwm;  // PWM 控制器实例
+    GpioController m_gpio; // control gpio
 };
 #endif // MAINWINDOW_H

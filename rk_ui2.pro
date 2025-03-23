@@ -10,12 +10,14 @@ CONFIG += c++17
 
 SOURCES += \
     canthread.cpp \
+    gpiocontroller.cpp \
     main.cpp \
     mainwindow.cpp \
     pwmcontroller.cpp
 
 HEADERS += \
     canthread.h \
+    gpiocontroller.h \
     mainwindow.h \
     pwmcontroller.h
 

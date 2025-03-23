@@ -411,3 +411,26 @@ void MainWindow::on_test_pwm_stop_clicked()
     }
 }
 
+
+void MainWindow::on_pushButton_14_clicked()
+{
+    if (!m_gpio.initGpio()) {
+        QMessageBox::critical(this, "错误", "direction gpio 初始化失败！");
+        return;
+    }
+    if (!m_gpio.setDir("out")) {
+        QMessageBox::critical(this, "错误", "set pin output mode failed");
+        return;
+    }
+    if(ui->comboBox_3->currentIndex() == 0){ // dir forward
+        if (!m_gpio.SetHigh()) {
+            QMessageBox::critical(this, "错误", "dir control failed");
+        }
+    }
+    else{ // dir inverse
+        if (!m_gpio.SetLow()) {
+            QMessageBox::critical(this, "错误", "dir control failed");
+        }
+    }
+}
+

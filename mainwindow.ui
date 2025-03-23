@@ -1846,9 +1846,9 @@ color: rgb(255, 255, 255);</string>
        <widget class="QPushButton" name="test_pwm_start">
         <property name="geometry">
          <rect>
-          <x>60</x>
-          <y>170</y>
-          <width>181</width>
+          <x>40</x>
+          <y>220</y>
+          <width>101</width>
           <height>25</height>
          </rect>
         </property>
@@ -1859,9 +1859,9 @@ color: rgb(255, 255, 255);</string>
        <widget class="QPushButton" name="test_pwm_stop">
         <property name="geometry">
          <rect>
-          <x>60</x>
+          <x>170</x>
           <y>220</y>
-          <width>181</width>
+          <width>101</width>
           <height>25</height>
          </rect>
         </property>
@@ -1872,8 +1872,8 @@ color: rgb(255, 255, 255);</string>
        <widget class="QLabel" name="label_35">
         <property name="geometry">
          <rect>
-          <x>60</x>
-          <y>60</y>
+          <x>50</x>
+          <y>130</y>
           <width>67</width>
           <height>17</height>
          </rect>
@@ -1890,8 +1890,8 @@ color: rgb(255, 255, 255);</string>
        <widget class="QLabel" name="label_36">
         <property name="geometry">
          <rect>
-          <x>70</x>
-          <y>110</y>
+          <x>50</x>
+          <y>170</y>
           <width>67</width>
           <height>17</height>
          </rect>
@@ -1909,7 +1909,7 @@ color: rgb(255, 255, 255);</string>
         <property name="geometry">
          <rect>
           <x>150</x>
-          <y>60</y>
+          <y>130</y>
           <width>113</width>
           <height>25</height>
          </rect>
@@ -1919,7 +1919,7 @@ color: rgb(255, 255, 255);</string>
         <property name="geometry">
          <rect>
           <x>150</x>
-          <y>110</y>
+          <y>170</y>
           <width>113</width>
           <height>25</height>
          </rect>
@@ -1945,7 +1945,40 @@ color: rgb(255, 255, 255);</string>
          <string notr="true">color: rgb(0, 0, 0);</string>
         </property>
         <property name="text">
-         <string>test pwm</string>
+         <string>test stepper motor</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBox_3">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>70</y>
+          <width>86</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <item>
+         <property name="text">
+          <string>forward</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>inverse</string>
+         </property>
+        </item>
+       </widget>
+       <widget class="QPushButton" name="pushButton_14">
+        <property name="geometry">
+         <rect>
+          <x>150</x>
+          <y>70</y>
+          <width>111</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>set direction</string>
         </property>
        </widget>
       </widget>
