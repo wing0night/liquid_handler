@@ -83,6 +83,10 @@ private slots:
     void send_tecan_command(QStringList command);
     void sendStepperCommand(const QString& input, QList<int> tecan_time);
 
+    void on_pushButton_16_clicked();
+
+    void on_pushButton_17_clicked();
+
 private:
     Ui::MainWindow *ui;
     CANThread *canthread;

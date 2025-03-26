@@ -1981,6 +1981,32 @@ color: rgb(255, 255, 255);</string>
          <string>set direction</string>
         </property>
        </widget>
+       <widget class="QPushButton" name="pushButton_16">
+        <property name="geometry">
+         <rect>
+          <x>40</x>
+          <y>250</y>
+          <width>101</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>pwm2 start</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_17">
+        <property name="geometry">
+         <rect>
+          <x>170</x>
+          <y>250</y>
+          <width>101</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>pwm2 stop</string>
+        </property>
+       </widget>
       </widget>
       <widget class="QFrame" name="frame_16">
        <property name="geometry">
