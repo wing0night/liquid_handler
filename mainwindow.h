@@ -19,6 +19,11 @@ struct ProcessResults {
     QString result2;
 };
 
+struct ProcessResult {
+    QString commandStr;  // 对应str1
+    QString positionStr; // 对应str2
+};
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -44,6 +49,8 @@ public slots:
     ProcessResults processString(const QString &input);// for command string process
 
     void moveStepper(const QString &input);
+
+    ProcessResult processText();
 
 private slots:
 
@@ -82,6 +89,7 @@ private slots:
 
     void send_tecan_command(QStringList command);
     void sendStepperCommand(const QString& input, QList<int> tecan_time);
+    void send_tecan_command2(QString input); // version2 use
 
     void on_pushButton_16_clicked();
 
@@ -91,8 +99,8 @@ private:
     Ui::MainWindow *ui;
     CANThread *canthread;
     PwmController m_pwm;  // PWM 控制器实例
-    GpioController m_gpio; // control gpio
+    GpioController m_gpio_2; // control gpio
     PwmController m_pwm_2 {3, 0};  //
-    GpioController m_gpio_2 {147}; // gpio4_C3
+    GpioController m_gpio {147}; // gpio4_C3
 };
 #endif // MAINWINDOW_H
