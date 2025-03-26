@@ -326,6 +326,22 @@ MainWindow::MainWindow(QWidget *parent)
     ui->periodEdit->setText("1000000");  // 1ms 周期
     ui->dutyEdit->setText("500000");     // 50% 占空比
 
+    // init 2 dir control gpio
+    if (!m_gpio.initGpio() || !m_gpio_2.initGpio()) {
+        QMessageBox::warning(this, "错误", "direction gpio 初始化失败！");
+        return;
+    }
+    if (!m_gpio.setDir("out") || !m_gpio_2.setDir("out")) {
+        QMessageBox::warning(this, "错误", "set pin output mode failed");
+        return;
+    }
+
+    // init 2 pwms
+    if (!m_pwm.initPwm() || !m_pwm_2.initPwm()) {
+        QMessageBox::warning(this, "错误", "PWM 初始化失败！");
+        return;
+    }
+
 }
 
 MainWindow::~MainWindow()
@@ -619,11 +635,7 @@ void MainWindow::on_pushButton_clicked()
 
 void MainWindow::on_test_pwm_start_clicked()
 {
-    // 1. 初始化 PWM
-    if (!m_pwm.initPwm()) {
-        QMessageBox::warning(this, "错误", "PWM 初始化失败！");
-        return;
-    }
+
 
     // 2. 设置周期和占空比
     bool ok;
@@ -661,21 +673,23 @@ void MainWindow::on_test_pwm_stop_clicked()
 
 void MainWindow::on_pushButton_14_clicked()
 {
-    if (!m_gpio.initGpio()) {
-        QMessageBox::warning(this, "错误", "direction gpio 初始化失败！");
-        return;
-    }
-    if (!m_gpio.setDir("out")) {
-        QMessageBox::warning(this, "错误", "set pin output mode failed");
-        return;
-    }
-    if(ui->comboBox_3->currentIndex() == 0){ // dir forward
+    if(ui->comboBox_3->currentIndex() == 0){ // dir up
         if (!m_gpio.SetHigh()) {
             QMessageBox::warning(this, "错误", "dir control failed");
         }
     }
-    else{ // dir inverse
+    else if(ui->comboBox_3->currentIndex() == 1){ // dir down
         if (!m_gpio.SetLow()) {
+            QMessageBox::warning(this, "错误", "dir control failed");
+        }
+    }
+    else if(ui->comboBox_3->currentIndex() == 2){ // dir left
+        if (!m_gpio_2.SetHigh()) {
+            QMessageBox::warning(this, "错误", "dir control failed");
+        }
+    }
+    else if(ui->comboBox_3->currentIndex() == 3){ // dir right
+        if (!m_gpio_2.SetLow()) {
             QMessageBox::warning(this, "错误", "dir control failed");
         }
     }
@@ -942,11 +956,6 @@ void MainWindow::sendStepperCommand(const QString& input, QList<int> tecan_time)
 
 void MainWindow::on_pushButton_16_clicked()
 {
-    // 1. 初始化 PWM2
-    if (!m_pwm_2.initPwm()) {
-        QMessageBox::warning(this, "错误", "PWM2 初始化失败！");
-        return;
-    }
 
     // 2. 设置周期和占空比
     bool ok;

@@ -1959,12 +1959,22 @@ color: rgb(255, 255, 255);</string>
         </property>
         <item>
          <property name="text">
-          <string>forward</string>
+          <string>up</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>inverse</string>
+          <string>down</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>left</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>right</string>
          </property>
         </item>
        </widget>
