@@ -134,6 +134,8 @@ void MainWindow::moveStepper(const QString &input) {
     QChar currentCommand;
     bool readingNumber = false;
 
+    unsigned int my_period = ui->periodEdit->text().toUInt();
+    unsigned int my_duty = ui->dutyEdit->text().toUInt();
     for (int i = 0; i < input.length(); ++i) {
         QChar c = input[i];
 
@@ -159,8 +161,8 @@ void MainWindow::moveStepper(const QString &input) {
                     QMessageBox::warning(this, "错误", "Up dir control failed");
                 }
                 //pwm set
-                unsigned int duty = 500000;// set duty to be fixed 500000 when activated
-                unsigned int period = 1000000;// set period to be fixed 500000 when activated
+                unsigned int duty = my_duty;// set duty to be fixed 500000 when activated
+                unsigned int period = my_period;// set period to be fixed 500000 when activated
                 if (!m_pwm.setPeriod(period) || !m_pwm.setDutyCycle(duty)) {
                     QMessageBox::warning(this, "错误", "Up参数设置失败");
                     return;
@@ -185,12 +187,12 @@ void MainWindow::moveStepper(const QString &input) {
                 // move right
                 // assume up dir controlled by m_gpio_2_high
                 // motor in the vertical dir controlled by m_pwm_2
-                if (!m_gpio.SetHigh()) {
+                if (!m_gpio.SetLow()) {
                     QMessageBox::warning(this, "错误", "Right dir control failed");
                 }
                 //pwm set
-                unsigned int duty = 500000;// set duty to be fixed 500000 when activated
-                unsigned int period = 1000000;// set period to be fixed 500000 when activated
+                unsigned int duty = my_duty;// set duty to be fixed 500000 when activated
+                unsigned int period = my_period;// set period to be fixed 500000 when activated
                 if (!m_pwm_2.setPeriod(period) || !m_pwm_2.setDutyCycle(duty)) {
                     QMessageBox::warning(this, "错误", "Right参数设置失败");
                     return;
@@ -219,8 +221,8 @@ void MainWindow::moveStepper(const QString &input) {
                     QMessageBox::warning(this, "错误", "Down dir control failed");
                 }
                 //pwm set
-                unsigned int duty = 500000;// set duty to be fixed 500000 when activated
-                unsigned int period = 1000000;// set period to be fixed 500000 when activated
+                unsigned int duty = my_duty;// set duty to be fixed 500000 when activated
+                unsigned int period = my_period;// set period to be fixed 500000 when activated
                 if (!m_pwm.setPeriod(period) || !m_pwm.setDutyCycle(duty)) {
                     QMessageBox::warning(this, "错误", "Down参数设置失败");
                     return;
@@ -245,12 +247,12 @@ void MainWindow::moveStepper(const QString &input) {
                 // move left
                 // assume up dir controlled by m_gpio_2_low
                 // motor in the vertical dir controlled by m_pwm_2
-                if (!m_gpio.SetLow()) {
+                if (!m_gpio.SetHigh()) {
                     QMessageBox::warning(this, "错误", "Left dir control failed");
                 }
                 //pwm set
-                unsigned int duty = 500000;// set duty to be fixed 500000 when activated
-                unsigned int period = 1000000;// set period to be fixed 500000 when activated
+                unsigned int duty = my_duty;// set duty to be fixed 500000 when activated
+                unsigned int period = my_period;// set period to be fixed 500000 when activated
                 if (!m_pwm_2.setPeriod(period) || !m_pwm_2.setDutyCycle(duty)) {
                     QMessageBox::warning(this, "错误", "Left参数设置失败");
                     return;
@@ -323,8 +325,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(canthread,SIGNAL(boardInfo(VCI_BOARD_INFO)),this,SLOT(onBoardInfo(VCI_BOARD_INFO)));
 
     // 初始化pwm默认参数
-    ui->periodEdit->setText("1000000");  // 1ms 周期
-    ui->dutyEdit->setText("500000");     // 50% 占空比
+    ui->periodEdit->setText("100000");  // 1ms 周期
+    ui->dutyEdit->setText("50000");     // 50% 占空比
 
     // init 2 dir control gpio
     if (!m_gpio.initGpio() || !m_gpio_2.initGpio()) {
@@ -674,12 +676,12 @@ void MainWindow::on_test_pwm_stop_clicked()
 void MainWindow::on_pushButton_14_clicked()
 {
     if(ui->comboBox_3->currentIndex() == 0){ // dir up
-        if (!m_gpio.SetHigh()) {
+        if (!m_gpio.SetLow()) {
             QMessageBox::warning(this, "错误", "dir control failed");
         }
     }
     else if(ui->comboBox_3->currentIndex() == 1){ // dir down
-        if (!m_gpio.SetLow()) {
+        if (!m_gpio.SetHigh()) {
             QMessageBox::warning(this, "错误", "dir control failed");
         }
     }
