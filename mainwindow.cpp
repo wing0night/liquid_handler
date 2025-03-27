@@ -328,7 +328,7 @@ void MainWindow::moveStepper(const QString &input) {
         QMessageBox::warning(this, "错误", "Right参数设置失败");
         return;
     }
-    for (int i = 0; i < input.length(); ++i) {
+    for (int i = 0; i < input.length(); i++) {
         QChar c = input[i];
 
         // 检测到新指令头
@@ -355,7 +355,7 @@ void MainWindow::moveStepper(const QString &input) {
                     }
                     qDebug() << "Moving Up to " << currentValue.toInt();
                     // start delay
-                    QThread::msleep(currentValue.toInt());
+                    QThread::msleep(currentValue.toInt()*10);
                     if (!m_pwm.disable()) {
                         QMessageBox::warning(this, "错误", "close Up PWM 失败");
                     }
@@ -378,7 +378,7 @@ void MainWindow::moveStepper(const QString &input) {
                     }
                     qDebug() << "Moving Right to " << currentValue.toInt();
                     // start delay
-                    QThread::msleep(currentValue.toInt());
+                    QThread::msleep(currentValue.toInt()*10);
                     if (!m_pwm_2.disable()) {
                         QMessageBox::warning(this, "错误", "Right close PWM 失败");
                     }
@@ -400,7 +400,7 @@ void MainWindow::moveStepper(const QString &input) {
                     }
                     qDebug() << "Moving Down to " << currentValue.toInt();
                     // start delay
-                    QThread::msleep(currentValue.toInt());
+                    QThread::msleep(currentValue.toInt()*10);
                     if (!m_pwm.disable()) {
                         QMessageBox::warning(this, "错误", "close Down PWM 失败");
                     }
@@ -422,7 +422,7 @@ void MainWindow::moveStepper(const QString &input) {
                     }
                     qDebug() << "Moving Left to " << currentValue.toInt();
                     // start delay
-                    QThread::msleep(currentValue.toInt());
+                    QThread::msleep(currentValue.toInt()*10);
                     if (!m_pwm_2.disable()) {
                         QMessageBox::warning(this, "错误", "Left close PWM 失败");
                     }
@@ -494,10 +494,12 @@ ProcessResult MainWindow::processText() {
         } else if (trimmed == "loop") {
             // 插入循环标记
             str1 += "g";
+            str2 += "g";
         } else if (endloopReg.match(trimmed).hasMatch()) {
             // 处理endloop+数字
             QString num = endloopReg.match(trimmed).captured(1);
             str1 += "G" + num;
+            str2 += "G" + num;
         }
     }
     result.commandStr = str1;
@@ -505,6 +507,56 @@ ProcessResult MainWindow::processText() {
     ui->textBrowser->setText(str1);  // 显示结果1
     ui->textBrowser->setText(str2);  // 显示结果2
     return result;
+}
+
+// handle str2, stepper information
+QString MainWindow::qtProcessString(const QString& input)
+{
+    using StatePair = QPair<QVector<QChar>, QVector<QChar>>;
+    QStack<StatePair> stack;
+    QVector<QChar> result;
+    QVector<QChar> current;
+    int i = 0;
+    const int n = input.length();
+
+    while (i < n) {
+        const QChar c = input[i];
+        if (c == 'g') {
+            stack.push(StatePair(result, current));
+            result = current;
+            current.clear();
+            ++i;
+        }
+        else if (c == 'G') {
+            ++i;
+            int x = 0;
+            while (i < n && input[i].isDigit()) {
+                x = x * 10 + input[i].digitValue();
+                ++i;
+            }
+
+            QVector<QChar> repeated;
+            for (int j = 0; j < x; ++j) {
+                repeated.append(current);
+            }
+
+            if (!stack.isEmpty()) {
+                StatePair state = stack.pop();
+                state.second.append(repeated);
+                current = state.second;
+                result = state.first;
+            } else {
+                current = repeated;
+            }
+        }
+        else {
+            current.append(c);
+            ++i;
+        }
+    }
+
+    result.append(current);
+    return QString(result.constData(), result.size());
 }
 
 
@@ -638,7 +690,7 @@ void MainWindow::on_run_your_scripts_clicked()
     QTextBrowser *textBrowser = ui->textBrowser;
     textBrowser->append("<span style='color: green;'>info </span>Running Scripts1");
     QString tecancommand = processText().commandStr;
-    QString steppercommand = processText().positionStr;
+    QString steppercommand = qtProcessString(processText().positionStr);
 
     send_tecan_command2(tecancommand);
     moveStepper(steppercommand);
@@ -1337,5 +1389,58 @@ void MainWindow::on_pushButton_17_clicked()
     if (!m_pwm_2.disable()) {
         QMessageBox::warning(this, "错误", "关闭 PWM2 失败");
     }
+}
+
+
+void MainWindow::on_pushButton_18_clicked()
+{
+    // 1. 获取输入并转换为 ASCII 字节数组
+    QByteArray bytes = intoAscii("  ");
+    // 2. 转换为十六进制字符串
+    QString hexResult = rawDataToHex(bytes);
+
+    QStringList strList = hexResult.split(" ");
+    unsigned char data[8];
+    memset(data,0,8);
+    UINT dlc = 0;
+    dlc = strList.count() > 8 ? 8 : strList.count();
+    for(int i = 0;i < dlc;i ++)
+        data[i] = strList.at(i).toInt(0,16);
+    QString f1 = "0080";
+    quint32 id = QVariant(f1.toInt(0,16)).toUInt();
+    if(canthread->sendData(0,
+                            id,
+                            ui->pro_debug_combo_frame2->currentIndex(),
+                            ui->pro_debug_combo_frame1->currentIndex(),
+                            data,dlc))
+    // update log
+    {updateCanLog(id, data, dlc, true);    }
+    else
+        QMessageBox::warning(this,"警告","数据发送失败！");
+
+    // send init parameter
+    // 1. 获取输入并转换为 ASCII 字节数组
+    QByteArray bytes2 = intoAscii("Z2S5IR");
+    // 2. 转换为十六进制字符串
+    QString hexResult2 = rawDataToHex(bytes2);
+
+    QStringList strList2 = hexResult2.split(" ");
+    unsigned char data2[8];
+    memset(data2,0,8);
+    UINT dlc2 = 0;
+    dlc2 = strList2.count() > 8 ? 8 : strList2.count();
+    for(int i = 0;i < dlc2;i ++)
+        data2[i] = strList2.at(i).toInt(0,16);
+    QString f12 = "0101";
+    quint32 id2 = QVariant(f12.toInt(0,16)).toUInt();
+    if(canthread->sendData(0,
+                            id2,
+                            ui->pro_debug_combo_frame2->currentIndex(),
+                            ui->pro_debug_combo_frame1->currentIndex(),
+                            data2,dlc2))
+    // update log
+    {updateCanLog(id2, data2, dlc2, true);    }
+    else
+        QMessageBox::warning(this,"警告","数据发送失败！");
 }
 

@@ -52,6 +52,8 @@ public slots:
 
     ProcessResult processText();
 
+    QString qtProcessString(const QString& input); // handle stepper command
+
 private slots:
 
     void on_motor_comboBox_currentTextChanged(const QString &arg1);
@@ -95,12 +97,14 @@ private slots:
 
     void on_pushButton_17_clicked();
 
+    void on_pushButton_18_clicked();
+
 private:
     Ui::MainWindow *ui;
     CANThread *canthread;
     PwmController m_pwm;  // PWM 控制器实例
-    GpioController m_gpio_2; // control gpio
+    GpioController m_gpio_2 {147}; // control gpio
     PwmController m_pwm_2 {3, 0};  //
-    GpioController m_gpio {147}; // gpio4_C3
+    GpioController m_gpio; // gpio4_C3
 };
 #endif // MAINWINDOW_H
