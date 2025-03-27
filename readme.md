@@ -27,6 +27,12 @@ a half-finished docs can be found here
 
 https://iw3ft6u1hzy.feishu.cn/wiki/QpXCwSFcdi9gwBkE8vOcHkAtnKc?from=from_copylink
 
+## use
 
+2 main interface in RK3566
+
+![alt text](images/Screenshot_2025-03-27_12-04-08.png)
+
+![alt text](images/Screenshot_2025-03-27_12-03-56.png)
 
 
