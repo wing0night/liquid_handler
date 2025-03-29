@@ -56,11 +56,6 @@ public slots:
 
 private slots:
 
-    void on_motor_comboBox_currentTextChanged(const QString &arg1);
-
-    void on_forward_clicked();
-
-    void on_reverse_clicked();
 
     void on_run_your_scripts_clicked();
 

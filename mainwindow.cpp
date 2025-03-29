@@ -653,38 +653,6 @@ void MainWindow::onGetProtocolData(VCI_CAN_OBJ *vci,unsigned int dwRel,unsigned 
 }
 
 
-
-void MainWindow::on_motor_comboBox_currentTextChanged(const QString &arg1)
-{
-    if (arg1 == "Motor1"){
-        // open the commucation with motor1
-        QTextBrowser *textBrowser = ui->textBrowser;
-        textBrowser->append("<span style='color: green;'>Info </span>Controlling motor1");
-    }
-    else if(arg1 == "Motor2"){
-        // open CAN of motor2
-        QTextBrowser *textBrowser = ui->textBrowser;
-        textBrowser->append("<span style='color: green;'>Info </span>Controlling motor2");
-    }
-    else{
-        //
-    }
-}
-
-
-void MainWindow::on_forward_clicked()
-{
-    QTextBrowser *textBrowser = ui->textBrowser;
-    textBrowser->append("<span style='color: green;'>info </span>go forward");
-}
-
-void MainWindow::on_reverse_clicked()
-{
-    QTextBrowser *textBrowser = ui->textBrowser;
-    textBrowser->append("<span style='color: green;'>info </span>go reverse");
-}
-
-
 void MainWindow::on_run_your_scripts_clicked()
 {
     QTextBrowser *textBrowser = ui->textBrowser;
@@ -1443,4 +1411,5 @@ void MainWindow::on_pushButton_18_clicked()
     else
         QMessageBox::warning(this,"警告","数据发送失败！");
 }
+
 
