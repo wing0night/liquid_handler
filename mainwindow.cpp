@@ -737,7 +737,7 @@ void MainWindow::on_pro_debug_send_clicked()
     for(int i = 0;i < dlc;i ++)
         data[i] = strList.at(i).toInt(0,16);
     quint32 id = QVariant(ui->pro_debug_ID->text().toInt(0,16)).toUInt();
-    if(canthread->sendData(0,
+    if(canthread->sendData(ui->pro_debug_combo_channel->currentIndex(),
                             QVariant(ui->pro_debug_ID->text().toInt(0,16)).toUInt(),
                             ui->pro_debug_combo_frame2->currentIndex(),
                             ui->pro_debug_combo_frame1->currentIndex(),
@@ -852,7 +852,7 @@ void MainWindow::on_pushButton_clicked()
 {
     // open in sequence
     bool dev = canthread->openDevice(4,//QVariant(ui->comboBox->currentIndex()).toUInt(),
-                                     0,
+                                     QVariant(ui->pro_debug_combo_index->currentIndex()).toUInt(),
                                      100);
     if(dev == false){
         QMessageBox::warning(this,"警告","CAN open failed！");
