@@ -15,12 +15,13 @@ QT_END_NAMESPACE
 
 // 定义结果容器
 struct ProcessResults {
-    QString result1;
+    QString result1;// tecan1
     QString result2;
 };
 
 struct ProcessResult {
-    QString commandStr;  // 对应str1
+    QString commandStr1;  // 对应tecan1
+    QString commandStr2;  // 对应tecan2
     QString positionStr; // 对应str2
 };
 
@@ -87,6 +88,7 @@ private slots:
     void send_tecan_command(QStringList command);
     void sendStepperCommand(const QString& input, QList<int> tecan_time);
     void send_tecan_command2(QString input); // version2 use
+    void send_tecan_command3(QString input);
 
     void on_pushButton_16_clicked();
 

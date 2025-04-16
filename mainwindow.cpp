@@ -332,7 +332,7 @@ void MainWindow::moveStepper(const QString &input) {
         QChar c = input[i];
 
         // 检测到新指令头
-        if (c == 'U' || c == 'R' || c == 'D' || c == 'L' || c == 'S' || i == input.length()-1) {
+        if (c == 'stepper1L' || c == 'stepper2R' || c == 'stepper1R' || c == 'stepper2L' || c == 'S' || i == input.length()-1) {
 
             if(i == input.length()-1){
                 currentValue.append(c); // include the last number(assume the normal condition that the last is always number)
@@ -341,7 +341,7 @@ void MainWindow::moveStepper(const QString &input) {
                 // 输出上一个指令
                 qDebug() << currentCommand << currentValue;
 
-                if (currentCommand == 'U'){
+                if (currentCommand == 'stepper1L'){
                     // move up
                     // assume up dir controlled by m_gpio_high
                     // motor in the vertical dir controlled by m_pwm
@@ -364,7 +364,7 @@ void MainWindow::moveStepper(const QString &input) {
                     currentValue.clear();
                     readingNumber = true;
                 }
-                else if(currentCommand == "R"){
+                else if(currentCommand == "stepper2R"){
                     // move right
                     // assume up dir controlled by m_gpio_2_high
                     // motor in the vertical dir controlled by m_pwm_2
@@ -387,7 +387,7 @@ void MainWindow::moveStepper(const QString &input) {
                     currentValue.clear();
                     readingNumber = true;
                 }
-                else if(currentCommand == "D"){
+                else if(currentCommand == "stepper1R"){
                     // move down
                     // assume up dir controlled by m_gpio_low
                     // motor in the vertical dir controlled by m_pwm
@@ -409,7 +409,7 @@ void MainWindow::moveStepper(const QString &input) {
                     currentValue.clear();
                     readingNumber = true;
                 }
-                else if(currentCommand == "L"){
+                else if(currentCommand == "stepper2L"){
                     // move left
                     // assume up dir controlled by m_gpio_2_low
                     // motor in the vertical dir controlled by m_pwm_2
@@ -473,7 +473,7 @@ void MainWindow::moveStepper(const QString &input) {
 
 ProcessResult MainWindow::processText() {
     QString input = ui->textEdit->toPlainText(); // 获取输入文本
-    QString str1, str2;
+    QString T_str1, T_str2, S_str;
     ProcessResult result;
 
     QRegularExpression endloopReg("^endloop(\\d+)$");
@@ -485,27 +485,35 @@ ProcessResult MainWindow::processText() {
         // 跳过注释和空行
         if (trimmed.startsWith("#") || trimmed.isEmpty()) continue;
 
-        if (trimmed.startsWith("%")) {
-            // 处理%开头的行
-            str1 += trimmed.mid(1);
+        if (trimmed.startsWith("%1")) {
+            // 处理%1开头的行
+            T_str1 += trimmed.mid(2);
+        } else if(trimmed.startsWith("%2")) {
+            // 处理%2开头的行
+            T_str2 += trimmed.mid(2);
         } else if (trimmed.startsWith("$")) {
             // 处理$开头的行
-            str2 += trimmed.mid(1);
+            S_str += trimmed.mid(1);
         } else if (trimmed == "loop") {
             // 插入循环标记
-            str1 += "g";
-            str2 += "g";
+            T_str1 += "g";
+            T_str2 += "g";
+            S_str += "g";
         } else if (endloopReg.match(trimmed).hasMatch()) {
             // 处理endloop+数字
             QString num = endloopReg.match(trimmed).captured(1);
-            str1 += "G" + num;
-            str2 += "G" + num;
+            T_str1 += "G" + num;
+            T_str2 += "G" + num;
+            S_str += "G" + num;
         }
     }
-    result.commandStr = str1;
-    result.positionStr = str2;
-    ui->textBrowser->setText(str1);  // 显示结果1
-    ui->textBrowser->setText(str2);  // 显示结果2
+    result.commandStr1 = T_str1;
+    result.commandStr2 = T_str2;
+    result.positionStr = S_str;
+
+    ui->textBrowser->setText(T_str2);  // 显示结果1
+    ui->textBrowser->setText(S_str);  // 显示结果2
+    ui->textBrowser->setText(T_str1);  // 显示结果1
     return result;
 }
 
@@ -657,10 +665,12 @@ void MainWindow::on_run_your_scripts_clicked()
 {
     QTextBrowser *textBrowser = ui->textBrowser;
     textBrowser->append("<span style='color: green;'>info </span>Running Scripts1");
-    QString tecancommand = processText().commandStr;
+    QString tecancommand1 = processText().commandStr1;
+    QString tecancommand2 = processText().commandStr2;
     QString steppercommand = qtProcessString(processText().positionStr);
 
-    send_tecan_command2(tecancommand);
+    send_tecan_command2(tecancommand1);
+    send_tecan_command3(tecancommand2);
     moveStepper(steppercommand);
 
 }
@@ -1245,6 +1255,137 @@ void MainWindow::send_tecan_command2(QString input){
                                 data,dlc))
         // update log
         {updateCanLog(257, data, dlc, true);        }
+        else
+            QMessageBox::warning(this,"警告","数据发送失败！");
+    }
+}
+
+void MainWindow::send_tecan_command3(QString input){
+    QStringList command = splitStringEvery8Chars(input);
+    unsigned int num = command.count();
+    if(num == 1){
+        QByteArray bytes = command[0].toLatin1();
+        // 2. 转换为十六进制字符串
+        QString hexResult = rawDataToHex(bytes);
+
+        QStringList strList = hexResult.split(" ");
+        unsigned char data[8];
+        memset(data,0,8);
+        UINT dlc = 0;
+        dlc = strList.count() > 8 ? 8 : strList.count();
+        for(int i = 0;i < dlc;i ++)
+            data[i] = strList.at(i).toInt(0,16);
+        if(canthread->sendData(0,
+                                305, // 0x0131
+                                0,
+                                0,
+                                data,dlc))
+        // update log
+        {updateCanLog(305, data, dlc, true);    }
+        else
+            QMessageBox::warning(this,"警告","数据发送失败！");
+    }
+    else if(num == 2){
+        QByteArray bytes0 = command[0].toLatin1();
+        QString hexResult0 = rawDataToHex(bytes0);
+        QByteArray bytes1 = command[1].toLatin1();
+        QString hexResult1 = rawDataToHex(bytes1);
+
+        QStringList strList0 = hexResult0.split(" ");
+        unsigned char data0[8];
+        memset(data0,0,8);
+        UINT dlc0 = 0;
+        dlc0 = strList0.count() > 8 ? 8 : strList0.count();
+        for(int i = 0;i < dlc0;i ++)
+            data0[i] = strList0.at(i).toInt(0,16);
+        if(canthread->sendData(0,
+                                307, // 0x0133, start multi-frame
+                                0,
+                                0,
+                                data0,dlc0))
+        // update log
+        {updateCanLog(307, data0, dlc0, true);    }
+        else
+            QMessageBox::warning(this,"警告","数据发送失败！");
+
+        QStringList strList1 = hexResult1.split(" ");
+        unsigned char data1[8];
+        memset(data1,0,8);
+        UINT dlc1 = 0;
+        dlc1 = strList1.count() > 8 ? 8 : strList1.count();
+        for(int i = 0;i < dlc1;i ++)
+            data1[i] = strList1.at(i).toInt(0,16);
+        if(canthread->sendData(0,
+                                305, // 0x0103, start multi-frame
+                                0,
+                                0,
+                                data1,dlc1))
+        // update log
+        {updateCanLog(305, data1, dlc1, true);    }
+        else
+            QMessageBox::warning(this,"警告","数据发送失败！");
+    }
+    else{
+        // general condition, frame amount >= 3
+        //start frame is the same
+        QByteArray bytes0 = command[0].toLatin1();
+        QString hexResult0 = rawDataToHex(bytes0);
+
+        QStringList strList0 = hexResult0.split(" ");
+        unsigned char data0[8];
+        memset(data0,0,8);
+        UINT dlc0 = 0;
+        dlc0 = strList0.count() > 8 ? 8 : strList0.count();
+        for(int i = 0;i < dlc0;i ++)
+            data0[i] = strList0.at(i).toInt(0,16);
+        if(canthread->sendData(0,
+                                307, // 0x0103, start multi-frame
+                                0,
+                                0,
+                                data0,dlc0))
+        // update log
+        {updateCanLog(307, data0, dlc0, true);    }
+        else
+            QMessageBox::warning(this,"警告","数据发送失败！");
+        for(unsigned int i=1; i<num-1; i++){
+            QByteArray bytes = command[i].toLatin1();
+            QString hexResult = rawDataToHex(bytes);
+
+            QStringList strList = hexResult.split(" ");
+            unsigned char data[8];
+            memset(data,0,8);
+            UINT dlc = 0;
+            dlc = strList.count() > 8 ? 8 : strList.count();
+            for(int i = 0;i < dlc;i ++)
+                data[i] = strList.at(i).toInt(0,16);
+            if(canthread->sendData(0,
+                                    308, // 0x0103, start multi-frame
+                                    0,
+                                    0,
+                                    data,dlc))
+            // update log
+            {updateCanLog(308, data, dlc, true);        }
+            else
+                QMessageBox::warning(this,"警告","数据发送失败！");
+        }
+        // last command: action command
+        QByteArray bytes = command[num-1].toLatin1();
+        QString hexResult = rawDataToHex(bytes);
+
+        QStringList strList = hexResult.split(" ");
+        unsigned char data[8];
+        memset(data,0,8);
+        UINT dlc = 0;
+        dlc = strList.count() > 8 ? 8 : strList.count();
+        for(int i = 0;i < dlc;i ++)
+            data[i] = strList.at(i).toInt(0,16);
+        if(canthread->sendData(0,
+                                305, // 0x0101, start multi-frame
+                                0,
+                                0,
+                                data,dlc))
+        // update log
+        {updateCanLog(305, data, dlc, true);        }
         else
             QMessageBox::warning(this,"警告","数据发送失败！");
     }
