@@ -29,6 +29,7 @@
     <property name="font">
      <font>
       <pointsize>14</pointsize>
+      <bold>true</bold>
      </font>
     </property>
     <property name="mouseTracking">
@@ -54,7 +55,7 @@ color: rgb(255, 255, 255);</string>
      <enum>QTabWidget::Triangular</enum>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>3</number>
     </property>
     <property name="iconSize">
      <size>
