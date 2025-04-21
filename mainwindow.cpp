@@ -346,7 +346,7 @@ void MainWindow::moveStepper(const QString &input) {
                 int duration = currentValue.toInt();
 
                 if (currentCommand == 'U') {
-                    if (!m_gpio.SetHigh() || !m_pwm_2.enable()) {
+                    if (!m_gpio.SetLow() || !m_pwm_2.enable()) {
                         QMessageBox::warning(this, "错误", "向上移动失败");
                         return;
                     }
@@ -362,7 +362,7 @@ void MainWindow::moveStepper(const QString &input) {
                     m_pwm.disable();
                 }
                 else if (currentCommand == 'D') {
-                    if (!m_gpio.SetLow() || !m_pwm_2.enable()) {
+                    if (!m_gpio.SetHigh() || !m_pwm_2.enable()) {
                         QMessageBox::warning(this, "错误", "向下移动失败");
                         return;
                     }
@@ -1611,4 +1611,91 @@ void MainWindow::on_pushButton_6_clicked()
         QMessageBox::warning(this,"警告","数据发送失败！");
 
 }
+
+
+void MainWindow::on_pushButton_7_clicked()
+{
+    ui->textEdit->setText(QString::fromUtf8(R"(
+
+    // wash
+    $R900U10S12000
+    %1M9
+    loop
+    %1I5A3000O6A0
+    endloop2
+    $D10
+    %1R
+
+)"));
+    QTextBrowser *textBrowser = ui->textBrowser;
+    textBrowser->append("<span style='color: green;'>info </span>Running Scripts1");
+    QString tecancommand1 = processText().commandStr1;
+    QString tecancommand2 = processText().commandStr2;
+    QString steppercommand = qtProcessString(processText().positionStr);
+
+    send_tecan_command2(tecancommand1);
+    send_tecan_command3(tecancommand2);
+    moveStepper(steppercommand);
+}
+
+
+void MainWindow::on_emergency_stop_3_clicked()
+{
+    // stop tecan
+    // 1. 获取输入并转换为 ASCII 字节数组
+    QByteArray bytes = intoAscii("4"); // stop immediately
+    // 2. 转换为十六进制字符串
+    QString hexResult = rawDataToHex(bytes);
+
+    QStringList strList = hexResult.split(" ");
+    unsigned char data[8];
+    memset(data,0,8);
+    UINT dlc = 0;
+    dlc = strList.count() > 8 ? 8 : strList.count();
+    for(int i = 0;i < dlc;i ++)
+        data[i] = strList.at(i).toInt(0,16);
+    if(canthread->sendData(0,
+                            258, //0x0102
+                            0,
+                            0,
+                            data,dlc))
+    // update log
+    {updateCanLog(0, data, dlc, true);    }
+    else
+        QMessageBox::warning(this,"警告","数据发送失败！");
+
+    //stop stepper
+    m_pwm_2.disable();
+    m_pwm.disable();
+}
+
+
+void MainWindow::on_pushButton_9_clicked()
+{
+    ui->textEdit->setText(QString::fromUtf8(R"(
+
+    // wash
+    $R900U10S12000
+    %2M9
+    loop
+    %2I5A3000O6A0
+    endloop2
+    $D10
+    %2R
+
+)"));
+    QTextBrowser *textBrowser = ui->textBrowser;
+    textBrowser->append("<span style='color: green;'>info </span>Running Scripts1");
+    QString tecancommand1 = processText().commandStr1;
+    QString tecancommand2 = processText().commandStr2;
+    QString steppercommand = qtProcessString(processText().positionStr);
+
+    send_tecan_command2(tecancommand1);
+    send_tecan_command3(tecancommand2);
+    moveStepper(steppercommand);
+}
+
+
+
+
 
