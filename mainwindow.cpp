@@ -317,9 +317,9 @@ void MainWindow::moveStepper(const QString &input) {
     unsigned int my_period = ui->periodEdit->text().toUInt();
     unsigned int my_duty = ui->dutyEdit->text().toUInt();
 
-    //pwm set
-    unsigned int duty = my_duty;// set duty to be fixed 500000 when activated
-    unsigned int period = my_period;// set period to be fixed 500000 when activated
+    // PWM参数设置
+    unsigned int duty = my_duty;
+    unsigned int period = my_period;
     if (!m_pwm.setPeriod(period) || !m_pwm.setDutyCycle(duty)) {
         QMessageBox::warning(this, "错误", "Up参数设置失败");
         return;
@@ -328,142 +328,73 @@ void MainWindow::moveStepper(const QString &input) {
         QMessageBox::warning(this, "错误", "Right参数设置失败");
         return;
     }
-    for (int i = 0; i < input.length(); i++) {
+
+    for (int i = 0; i < input.length(); ++i) {
         QChar c = input[i];
+        bool isCommand = (c == 'U' || c == 'R' || c == 'D' || c == 'L' || c == 'S');
 
-        // 检测到新指令头
-        if (c == 'U' || c == 'R' || c == 'D' || c == 'L' || c == 'S' || i == input.length()-1) {
-
-            if(i == input.length()-1){
-                currentValue.append(c); // include the last number(assume the normal condition that the last is always number)
+        // 检测到指令头或字符串末尾
+        if (isCommand || i == input.length() - 1) {
+            // 处理末尾字符：只有数字且在读取状态时添加
+            if (i == input.length() - 1 && readingNumber && c.isDigit()) {
+                currentValue.append(c);
             }
-            if (!currentCommand.isNull()) {
-                // 输出上一个指令
-                qDebug() << currentCommand << currentValue;
 
-                if (currentCommand == 'U'){
-                    // move up
-                    // assume up dir controlled by m_gpio_high
-                    // motor in the vertical dir controlled by m_pwm
-                    if (!m_gpio.SetHigh()) {
-                        QMessageBox::warning(this, "错误", "Up dir control failed");
-                    }
+            // 执行当前指令
+            if (!currentCommand.isNull() && !currentValue.isEmpty()) {
+                qDebug() << "Processing:" << currentCommand << currentValue;
+                int duration = currentValue.toInt();
 
-                    // 3. 启用 PWM
-                    if (!m_pwm.enable()) {
-                        QMessageBox::warning(this, "错误", "启用 Up PWM 失败");
+                if (currentCommand == 'U') {
+                    if (!m_gpio.SetHigh() || !m_pwm_2.enable()) {
+                        QMessageBox::warning(this, "错误", "向上移动失败");
+                        return;
                     }
-                    qDebug() << "Moving Up to " << currentValue.toInt();
-                    // start delay
-                    QThread::msleep(currentValue.toInt()*10);
-                    if (!m_pwm.disable()) {
-                        QMessageBox::warning(this, "错误", "close Up PWM 失败");
-                    }
-                    qDebug() << "Done moving up" << currentValue.toInt();
-                    currentCommand = c;
-                    currentValue.clear();
-                    readingNumber = true;
+                    QThread::msleep(duration * 10);
+                    m_pwm_2.disable();
                 }
-                else if(currentCommand == "R"){
-                    // move right
-                    // assume up dir controlled by m_gpio_2_high
-                    // motor in the vertical dir controlled by m_pwm_2
-                    if (!m_gpio_2.SetHigh()) {
-                        QMessageBox::warning(this, "错误", "Right dir control failed");
+                else if (currentCommand == 'R') {
+                    if (!m_gpio_2.SetHigh() || !m_pwm.enable()) {
+                        QMessageBox::warning(this, "错误", "向右移动失败");
+                        return;
                     }
-
-                    // 3. 启用 PWM
-                    if (!m_pwm_2.enable()) {
-                        QMessageBox::warning(this, "错误", "启用 Right PWM 失败");
-                    }
-                    qDebug() << "Moving Right to " << currentValue.toInt();
-                    // start delay
-                    QThread::msleep(currentValue.toInt()*10);
-                    if (!m_pwm_2.disable()) {
-                        QMessageBox::warning(this, "错误", "Right close PWM 失败");
-                    }
-                    qDebug() << "Done moving right " << currentValue.toInt();
-                    currentCommand = c;
-                    currentValue.clear();
-                    readingNumber = true;
+                    QThread::msleep(duration * 10);
+                    m_pwm.disable();
                 }
-                else if(currentCommand == "D"){
-                    // move down
-                    // assume up dir controlled by m_gpio_low
-                    // motor in the vertical dir controlled by m_pwm
-                    if (!m_gpio.SetLow()) {
-                        QMessageBox::warning(this, "错误", "Down dir control failed");
+                else if (currentCommand == 'D') {
+                    if (!m_gpio.SetLow() || !m_pwm_2.enable()) {
+                        QMessageBox::warning(this, "错误", "向下移动失败");
+                        return;
                     }
-                    // 3. 启用 PWM
-                    if (!m_pwm.enable()) {
-                        QMessageBox::warning(this, "错误", "启用 Down PWM 失败");
-                    }
-                    qDebug() << "Moving Down to " << currentValue.toInt();
-                    // start delay
-                    QThread::msleep(currentValue.toInt()*10);
-                    if (!m_pwm.disable()) {
-                        QMessageBox::warning(this, "错误", "close Down PWM 失败");
-                    }
-                    qDebug() << "Done moving down " << currentValue.toInt();
-                    currentCommand = c;
-                    currentValue.clear();
-                    readingNumber = true;
+                    QThread::msleep(duration * 10);
+                    m_pwm_2.disable();
                 }
-                else if(currentCommand == "L"){
-                    // move left
-                    // assume up dir controlled by m_gpio_2_low
-                    // motor in the vertical dir controlled by m_pwm_2
-                    if (!m_gpio_2.SetLow()) {
-                        QMessageBox::warning(this, "错误", "Left dir control failed");
+                else if (currentCommand == 'L') {
+                    if (!m_gpio_2.SetLow() || !m_pwm.enable()) {
+                        QMessageBox::warning(this, "错误", "向左移动失败");
+                        return;
                     }
-                    // 3. 启用 PWM
-                    if (!m_pwm_2.enable()) {
-                        QMessageBox::warning(this, "错误", "启用 Left PWM 失败");
-                    }
-                    qDebug() << "Moving Left to " << currentValue.toInt();
-                    // start delay
-                    QThread::msleep(currentValue.toInt()*10);
-                    if (!m_pwm_2.disable()) {
-                        QMessageBox::warning(this, "错误", "Left close PWM 失败");
-                    }
-                    qDebug() << "Done moving left " << currentValue.toInt();
-                    currentCommand = c;
-                    currentValue.clear();
-                    readingNumber = true;
+                    QThread::msleep(duration * 10);
+                    m_pwm.disable();
                 }
-                else if (currentCommand == "S"){
-                    qDebug() << "Stepper start delay" << currentValue.toInt();
-                    QThread::msleep(currentValue.toInt());
-                    qDebug() << "finished delay";
-                    currentCommand = c;
-                    currentValue.clear();
-                    readingNumber = true;
+                else if (currentCommand == 'S') {
+                    QThread::msleep(duration);
                 }
-                else{
-                    qDebug() << "invalid command!";
-                }
-
             }
-            else{ // currentCommand == NULL
-                currentCommand = c;
-                currentValue.clear();
-                readingNumber = true;
-            }
+
+            // 设置新指令
+            currentCommand = isCommand ? c : QChar();
+            currentValue.clear();
+            readingNumber = isCommand;
         }
-
-        // 读取数字部分
+        // 收集数字
         else if (readingNumber && c.isDigit()) {
             currentValue.append(c);
         }
-        // 遇到非数字字符时结束读取
+        // 非法字符
         else {
             readingNumber = false;
         }
-    }
-
-    // 输出最后一个指令
-    if (!currentCommand.isNull()) {
-        qDebug() << currentCommand << currentValue;
     }
 }
 
