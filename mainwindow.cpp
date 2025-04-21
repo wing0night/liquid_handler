@@ -320,7 +320,8 @@ void MainWindow::moveStepper(const QString &input) {
     // PWM参数设置
     unsigned int duty = my_duty;
     unsigned int period = my_period;
-    if (!m_pwm.setPeriod(period) || !m_pwm.setDutyCycle(duty)) {
+    unsigned int period2 = 100000;
+    if (!m_pwm.setPeriod(period2) || !m_pwm.setDutyCycle(duty)) {
         QMessageBox::warning(this, "错误", "Up参数设置失败");
         return;
     }
@@ -1618,12 +1619,12 @@ void MainWindow::on_pushButton_7_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R900U10S12000
-    %1M9000
+    $R180U150S12000
+    %1M1800
     loop
     %1I5A3000O6A0
     endloop2
-    $D10L900
+    $D150L180
     %1R
 
 )"));
@@ -1675,12 +1676,12 @@ void MainWindow::on_pushButton_9_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R900U10S12000
-    %2M9000
+    $R180U150S12000
+    %2M1800
     loop
     %2I5A3000O6A0
     endloop2
-    $D10L900
+    $D150L180
     %2R
 
 )"));
@@ -1705,12 +1706,12 @@ void MainWindow::on_pushButton_8_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash PIP
-    $R900U10S12000
-    %1M9000
+    $R180U150S12000
+    %1M1800
     loop
     %1I5A3000O1A0
     endloop2
-    $D10L900
+    $D150L180
     %1R
 
 )"));
@@ -1731,12 +1732,12 @@ void MainWindow::on_pushButton_10_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash PIP
-    $R900U10S12000
-    %1M9000
+    $R180U150S12000
+    %1M1800
     loop
     %1I5A3000O2A0
     endloop2
-    $D10L900
+    $D150L180
     %1R
 
 )"));
@@ -1757,12 +1758,12 @@ void MainWindow::on_pushButton_11_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash PIP
-    $R900U10S12000
-    %1M9000
+    $R180U150S12000
+    %1M1800
     loop
     %1I5A3000O3A0
     endloop2
-    $D10L900
+    $D150L180
     %1R
 
 )"));
@@ -1783,12 +1784,12 @@ void MainWindow::on_pushButton_12_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash PIP
-    $R900U10S12000
-    %1M9000
+    $R180U150S12000
+    %1M1800
     loop
     %1I5A3000O4A0
     endloop2
-    $D10L900
+    $D150L180
     %1R
 
 )"));
@@ -1809,12 +1810,12 @@ void MainWindow::on_pushButton_21_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash PIP
-    $R900U10S12000
-    %2M9000
+    $R180U150S12000
+    %2M1800
     loop
     %2I5A3000O1A0
     endloop2
-    $D10L900
+    $D150L180
     %2R
 
 )"));
@@ -1835,12 +1836,12 @@ void MainWindow::on_pushButton_13_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash PIP
-    $R900U10S12000
-    %2M9000
+    $R180U150S12000
+    %2M1800
     loop
     %2I5A3000O2A0
     endloop2
-    $D10L900
+    $D150L180
     %2R
 
 )"));
@@ -1861,12 +1862,12 @@ void MainWindow::on_pushButton_20_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash PIP
-    $R900U10S12000
-    %2M9000
+    $R180U150S12000
+    %2M1800
     loop
     %2I5A3000O3A0
     endloop2
-    $D10L900
+    $D150L180
     %2R
 
 )"));
@@ -1887,12 +1888,12 @@ void MainWindow::on_pushButton_19_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash PIP
-    $R900U10S12000
-    %2M9000
+    $R180U150S12000
+    %2M1800
     loop
     %2I5A3000O4A0
     endloop2
-    $D10L900
+    $D150L180
     %2R
 
 )"));
@@ -1913,12 +1914,12 @@ void MainWindow::on_pushButton_22_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R900S12000
-    %1M9000
+    $R180S12000
+    %1M1800
     loop
     %1I5A3000O6A0
     endloop2
-    $L900
+    $L180
     %1R
 
 )"));
@@ -1939,12 +1940,12 @@ void MainWindow::on_pushButton_23_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R900S12000
-    %2M9000
+    $R180S12000
+    %2M1800
     loop
     %2I5A3000O6A0
     endloop2
-    $L900
+    $L180
     %2R
 
 )"));
@@ -1965,12 +1966,12 @@ void MainWindow::on_pushButton_24_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R900S12000
-    %1M9000
+    $R180S12000
+    %1M1800
     loop
     %1I5A3000O1A0
     endloop2
-    $L900
+    $L180
     %1R
 
 )"));
@@ -1991,12 +1992,12 @@ void MainWindow::on_pushButton_25_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R900S12000
-    %1M9000
+    $R180S12000
+    %1M1800
     loop
     %1I5A3000O2A0
     endloop2
-    $L900
+    $L180
     %1R
 
 )"));
@@ -2017,12 +2018,12 @@ void MainWindow::on_pushButton_26_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R900S12000
-    %1M9000
+    $R180S12000
+    %1M1800
     loop
     %1I5A3000O3A0
     endloop2
-    $L900
+    $L180
     %1R
 
 )"));
@@ -2043,12 +2044,12 @@ void MainWindow::on_pushButton_27_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R900S12000
-    %1M9000
+    $R180S12000
+    %1M1800
     loop
     %1I5A3000O4A0
     endloop2
-    $L900
+    $L180
     %1R
 
 )"));
@@ -2069,12 +2070,12 @@ void MainWindow::on_pushButton_31_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R900S12000
-    %2M9000
+    $R180S12000
+    %2M1800
     loop
     %2I5A3000O1A0
     endloop2
-    $L900
+    $L180
     %2R
 
 )"));
@@ -2095,12 +2096,12 @@ void MainWindow::on_pushButton_28_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R900S12000
-    %2M9000
+    $R180S12000
+    %2M1800
     loop
     %2I5A3000O2A0
     endloop2
-    $L900
+    $L180
     %2R
 
 )"));
@@ -2121,12 +2122,12 @@ void MainWindow::on_pushButton_30_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R900S12000
-    %2M9000
+    $R180S12000
+    %2M1800
     loop
     %2I5A3000O3A0
     endloop2
-    $L900
+    $L180
     %2R
 
 )"));
@@ -2147,12 +2148,12 @@ void MainWindow::on_pushButton_29_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R900S12000
-    %2M9000
+    $R180S12000
+    %2M1800
     loop
     %2I5A3000O4A0
     endloop2
-    $L900
+    $L180
     %2R
 
 )"));
@@ -2174,12 +2175,12 @@ void MainWindow::on_pushButton_32_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R100S6000
-    %1M1000
+    $R20U150S6000
+    %1M200
     loop
     %1I5A3000O1A0
     endloop1
-$L100
+$D150L20
     %1R
 
 )"));
@@ -2200,12 +2201,12 @@ void MainWindow::on_pushButton_34_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R200S6000
-    %1M2000
+    $R40U150S6000
+    %1M400
 loop
     %1I5A3000O2A0
 endloop1
-    $L200
+    $D150L40
     %1R
 
 )"));
@@ -2226,12 +2227,12 @@ void MainWindow::on_pushButton_35_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R300S6000
-    %1M3000
+    $R60U150S6000
+    %1M600
 loop
     %1I5A3000O3A0
 endloop1
-    $L300
+    $D150L60
     %1R
 
 )"));
@@ -2252,12 +2253,12 @@ void MainWindow::on_pushButton_36_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R400S6000
-    %1M4000
+    $R80U150S6000
+    %1M800
 loop
     %1I5A3000O4A0
 endloop1
-    $L400
+    $D150L80
     %1R
 
 )"));
@@ -2278,12 +2279,12 @@ void MainWindow::on_pushButton_33_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R500S6000
-    %2M5000
+    $R100U150S6000
+    %2M1000
 loop
     %2I5A3000O1A0
 endloop1
-    $L500
+    $D150L100
     %2R
 
 )"));
@@ -2304,12 +2305,12 @@ void MainWindow::on_pushButton_41_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R600S6000
+    $R600U150S6000
     %2M6000
 loop
     %2I5A3000O2A0
 endloop1
-    $L600
+    $D150L600
     %2R
 
 )"));
@@ -2330,12 +2331,12 @@ void MainWindow::on_pushButton_38_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R700S6000
-    %2M7000
+    $R140U150S6000
+    %2M1400
 loop
     %2I5A3000O3A0
 endloop1
-    $L700
+    $D150L140
     %2R
 
 )"));
@@ -2356,12 +2357,12 @@ void MainWindow::on_pushButton_40_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R800S6000
-    %2M8000
+    $R160U150S6000
+    %2M1600
 loop
     %2I5A3000O4A0
 endloop1
-    $L800
+    $D150L160
     %2R
 
 )"));
