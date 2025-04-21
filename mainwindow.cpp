@@ -332,7 +332,7 @@ void MainWindow::moveStepper(const QString &input) {
         QChar c = input[i];
 
         // 检测到新指令头
-        if (c == 'stepper1L' || c == 'stepper2R' || c == 'stepper1R' || c == 'stepper2L' || c == 'S' || i == input.length()-1) {
+        if (c == 'U' || c == 'R' || c == 'D' || c == 'L' || c == 'S' || i == input.length()-1) {
 
             if(i == input.length()-1){
                 currentValue.append(c); // include the last number(assume the normal condition that the last is always number)
@@ -341,7 +341,7 @@ void MainWindow::moveStepper(const QString &input) {
                 // 输出上一个指令
                 qDebug() << currentCommand << currentValue;
 
-                if (currentCommand == 'stepper1L'){
+                if (currentCommand == 'U'){
                     // move up
                     // assume up dir controlled by m_gpio_high
                     // motor in the vertical dir controlled by m_pwm
@@ -364,7 +364,7 @@ void MainWindow::moveStepper(const QString &input) {
                     currentValue.clear();
                     readingNumber = true;
                 }
-                else if(currentCommand == "stepper2R"){
+                else if(currentCommand == "R"){
                     // move right
                     // assume up dir controlled by m_gpio_2_high
                     // motor in the vertical dir controlled by m_pwm_2
@@ -387,7 +387,7 @@ void MainWindow::moveStepper(const QString &input) {
                     currentValue.clear();
                     readingNumber = true;
                 }
-                else if(currentCommand == "stepper1R"){
+                else if(currentCommand == "D"){
                     // move down
                     // assume up dir controlled by m_gpio_low
                     // motor in the vertical dir controlled by m_pwm
@@ -409,7 +409,7 @@ void MainWindow::moveStepper(const QString &input) {
                     currentValue.clear();
                     readingNumber = true;
                 }
-                else if(currentCommand == "stepper2L"){
+                else if(currentCommand == "L"){
                     // move left
                     // assume up dir controlled by m_gpio_2_low
                     // motor in the vertical dir controlled by m_pwm_2
@@ -595,7 +595,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(canthread,SIGNAL(boardInfo(VCI_BOARD_INFO)),this,SLOT(onBoardInfo(VCI_BOARD_INFO)));
 
     // 初始化pwm默认参数
-    ui->periodEdit->setText("100000");  // 1ms 周期
+    ui->periodEdit->setText("500000");  // 1ms 周期
     ui->dutyEdit->setText("50000");     // 50% 占空比
 
     // init 2 dir control gpio
@@ -908,6 +908,8 @@ void MainWindow::on_test_pwm_start_clicked()
     if (!m_pwm.enable()) {
         QMessageBox::warning(this, "错误", "启用 PWM 失败");
     }
+
+
 }
 
 
@@ -1553,4 +1555,129 @@ void MainWindow::on_pushButton_18_clicked()
         QMessageBox::warning(this,"警告","数据发送失败！");
 }
 
+void MainWindow::on_pushButton_2_clicked()
+{
+    // open in sequence
+    bool dev = canthread->openDevice(4,//QVariant(ui->comboBox->currentIndex()).toUInt(),
+                                     QVariant(ui->pro_debug_combo_index->currentIndex()).toUInt(),
+                                     100);
+    if(dev == false){
+        QMessageBox::warning(this,"警告","CAN open failed！");
+    }
+    bool initcan = canthread->initCAN();
+    if(initcan == false)
+    {
+        QMessageBox::warning(this,"警告","CAN open failed！");
+    }
+    bool startcan = canthread->startCAN();
+    if (startcan == false){
+        QMessageBox::warning(this,"警告","CAN open failed！");
+    }
+    canthread->start();
+}
+
+
+void MainWindow::on_pushButton_3_clicked()
+{
+    // 1. 获取输入并转换为 ASCII 字节数组
+    QByteArray bytes = intoAscii("  ");
+    // 2. 转换为十六进制字符串
+    QString hexResult = rawDataToHex(bytes);
+
+    QStringList strList = hexResult.split(" ");
+    unsigned char data[8];
+    memset(data,0,8);
+    UINT dlc = 0;
+    dlc = strList.count() > 8 ? 8 : strList.count();
+    for(int i = 0;i < dlc;i ++)
+        data[i] = strList.at(i).toInt(0,16);
+    if(canthread->sendData(0,
+                            128, //0x0080
+                            0,
+                            0,
+                            data,dlc))
+    // update log
+    {updateCanLog(0, data, dlc, true);    }
+    else
+        QMessageBox::warning(this,"警告","数据发送失败！");
+}
+
+
+void MainWindow::on_pushButton_4_clicked()
+{
+    // 1. 获取输入并转换为 ASCII 字节数组
+    QByteArray bytes = intoAscii("&&");
+    // 2. 转换为十六进制字符串
+    QString hexResult = rawDataToHex(bytes);
+
+    QStringList strList = hexResult.split(" ");
+    unsigned char data[8];
+    memset(data,0,8);
+    UINT dlc = 0;
+    dlc = strList.count() > 8 ? 8 : strList.count();
+    for(int i = 0;i < dlc;i ++)
+        data[i] = strList.at(i).toInt(0,16);
+    if(canthread->sendData(0,
+                            128, //0x0080
+                            0,
+                            0,
+                            data,dlc))
+    // update log
+    {updateCanLog(0, data, dlc, true);    }
+    else
+        QMessageBox::warning(this,"警告","数据发送失败！");
+}
+
+
+void MainWindow::on_pushButton_5_clicked()
+{
+    // 1. 获取输入并转换为 ASCII 字节数组
+    QByteArray bytes = intoAscii("Z2S5IR");
+    // 2. 转换为十六进制字符串
+    QString hexResult = rawDataToHex(bytes);
+
+    QStringList strList = hexResult.split(" ");
+    unsigned char data[8];
+    memset(data,0,8);
+    UINT dlc = 0;
+    dlc = strList.count() > 8 ? 8 : strList.count();
+    for(int i = 0;i < dlc;i ++)
+        data[i] = strList.at(i).toInt(0,16);
+    if(canthread->sendData(0,
+                            257, //0x0101
+                            0,
+                            0,
+                            data,dlc))
+    // update log
+    {updateCanLog(257, data, dlc, true);    }
+    else
+        QMessageBox::warning(this,"警告","数据发送失败！");
+}
+
+
+void MainWindow::on_pushButton_6_clicked()
+{
+    // 1. 获取输入并转换为 ASCII 字节数组
+    QByteArray bytes = intoAscii("Z2S5IR");
+    // 2. 转换为十六进制字符串
+    QString hexResult = rawDataToHex(bytes);
+
+    QStringList strList = hexResult.split(" ");
+    unsigned char data[8];
+    memset(data,0,8);
+    UINT dlc = 0;
+    dlc = strList.count() > 8 ? 8 : strList.count();
+    for(int i = 0;i < dlc;i ++)
+        data[i] = strList.at(i).toInt(0,16);
+    if(canthread->sendData(0,
+                            305, //0x0131
+                            0,
+                            0,
+                            data,dlc))
+    // update log
+    {updateCanLog(305, data, dlc, true);    }
+    else
+        QMessageBox::warning(this,"警告","数据发送失败！");
+
+}
 
