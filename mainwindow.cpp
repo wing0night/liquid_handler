@@ -346,7 +346,7 @@ void MainWindow::moveStepper(const QString &input) {
                 int duration = currentValue.toInt();
 
                 if (currentCommand == 'U') {
-                    if (!m_gpio.SetLow() || !m_pwm_2.enable()) {
+                    if (!m_gpio.SetHigh() || !m_pwm_2.enable()) {
                         QMessageBox::warning(this, "错误", "向上移动失败");
                         return;
                     }
@@ -362,7 +362,7 @@ void MainWindow::moveStepper(const QString &input) {
                     m_pwm.disable();
                 }
                 else if (currentCommand == 'D') {
-                    if (!m_gpio.SetHigh() || !m_pwm_2.enable()) {
+                    if (!m_gpio.SetLow() || !m_pwm_2.enable()) {
                         QMessageBox::warning(this, "错误", "向下移动失败");
                         return;
                     }
@@ -1619,11 +1619,11 @@ void MainWindow::on_pushButton_7_clicked()
 
     // wash
     $R900U10S12000
-    %1M9
+    %1M9000
     loop
     %1I5A3000O6A0
     endloop2
-    $D10
+    $D10L900
     %1R
 
 )"));
@@ -1676,11 +1676,11 @@ void MainWindow::on_pushButton_9_clicked()
 
     // wash
     $R900U10S12000
-    %2M9
+    %2M9000
     loop
     %2I5A3000O6A0
     endloop2
-    $D10
+    $D10L900
     %2R
 
 )"));
@@ -1698,4 +1698,681 @@ void MainWindow::on_pushButton_9_clicked()
 
 
 
+
+
+void MainWindow::on_pushButton_8_clicked()
+{
+    ui->textEdit->setText(QString::fromUtf8(R"(
+
+    // wash PIP
+    $R900U10S12000
+    %1M9000
+    loop
+    %1I5A3000O1A0
+    endloop2
+    $D10L900
+    %1R
+
+)"));
+    QTextBrowser *textBrowser = ui->textBrowser;
+    textBrowser->append("<span style='color: green;'>info </span>Running Scripts1");
+    QString tecancommand1 = processText().commandStr1;
+    QString tecancommand2 = processText().commandStr2;
+    QString steppercommand = qtProcessString(processText().positionStr);
+
+    send_tecan_command2(tecancommand1);
+    send_tecan_command3(tecancommand2);
+    moveStepper(steppercommand);
+}
+
+
+void MainWindow::on_pushButton_10_clicked()
+{
+    ui->textEdit->setText(QString::fromUtf8(R"(
+
+    // wash PIP
+    $R900U10S12000
+    %1M9000
+    loop
+    %1I5A3000O2A0
+    endloop2
+    $D10L900
+    %1R
+
+)"));
+    QTextBrowser *textBrowser = ui->textBrowser;
+    textBrowser->append("<span style='color: green;'>info </span>Running Scripts1");
+    QString tecancommand1 = processText().commandStr1;
+    QString tecancommand2 = processText().commandStr2;
+    QString steppercommand = qtProcessString(processText().positionStr);
+
+    send_tecan_command2(tecancommand1);
+    send_tecan_command3(tecancommand2);
+    moveStepper(steppercommand);
+}
+
+
+void MainWindow::on_pushButton_11_clicked()
+{
+    ui->textEdit->setText(QString::fromUtf8(R"(
+
+    // wash PIP
+    $R900U10S12000
+    %1M9000
+    loop
+    %1I5A3000O3A0
+    endloop2
+    $D10L900
+    %1R
+
+)"));
+    QTextBrowser *textBrowser = ui->textBrowser;
+    textBrowser->append("<span style='color: green;'>info </span>Running Scripts1");
+    QString tecancommand1 = processText().commandStr1;
+    QString tecancommand2 = processText().commandStr2;
+    QString steppercommand = qtProcessString(processText().positionStr);
+
+    send_tecan_command2(tecancommand1);
+    send_tecan_command3(tecancommand2);
+    moveStepper(steppercommand);
+}
+
+
+void MainWindow::on_pushButton_12_clicked()
+{
+    ui->textEdit->setText(QString::fromUtf8(R"(
+
+    // wash PIP
+    $R900U10S12000
+    %1M9000
+    loop
+    %1I5A3000O4A0
+    endloop2
+    $D10L900
+    %1R
+
+)"));
+    QTextBrowser *textBrowser = ui->textBrowser;
+    textBrowser->append("<span style='color: green;'>info </span>Running Scripts1");
+    QString tecancommand1 = processText().commandStr1;
+    QString tecancommand2 = processText().commandStr2;
+    QString steppercommand = qtProcessString(processText().positionStr);
+
+    send_tecan_command2(tecancommand1);
+    send_tecan_command3(tecancommand2);
+    moveStepper(steppercommand);
+}
+
+
+void MainWindow::on_pushButton_21_clicked()
+{
+    ui->textEdit->setText(QString::fromUtf8(R"(
+
+    // wash PIP
+    $R900U10S12000
+    %2M9000
+    loop
+    %2I5A3000O1A0
+    endloop2
+    $D10L900
+    %2R
+
+)"));
+    QTextBrowser *textBrowser = ui->textBrowser;
+    textBrowser->append("<span style='color: green;'>info </span>Running Scripts1");
+    QString tecancommand1 = processText().commandStr1;
+    QString tecancommand2 = processText().commandStr2;
+    QString steppercommand = qtProcessString(processText().positionStr);
+
+    send_tecan_command2(tecancommand1);
+    send_tecan_command3(tecancommand2);
+    moveStepper(steppercommand);
+}
+
+
+void MainWindow::on_pushButton_13_clicked()
+{
+    ui->textEdit->setText(QString::fromUtf8(R"(
+
+    // wash PIP
+    $R900U10S12000
+    %2M9000
+    loop
+    %2I5A3000O2A0
+    endloop2
+    $D10L900
+    %2R
+
+)"));
+    QTextBrowser *textBrowser = ui->textBrowser;
+    textBrowser->append("<span style='color: green;'>info </span>Running Scripts1");
+    QString tecancommand1 = processText().commandStr1;
+    QString tecancommand2 = processText().commandStr2;
+    QString steppercommand = qtProcessString(processText().positionStr);
+
+    send_tecan_command2(tecancommand1);
+    send_tecan_command3(tecancommand2);
+    moveStepper(steppercommand);
+}
+
+
+void MainWindow::on_pushButton_20_clicked()
+{
+    ui->textEdit->setText(QString::fromUtf8(R"(
+
+    // wash PIP
+    $R900U10S12000
+    %2M9000
+    loop
+    %2I5A3000O3A0
+    endloop2
+    $D10L900
+    %2R
+
+)"));
+    QTextBrowser *textBrowser = ui->textBrowser;
+    textBrowser->append("<span style='color: green;'>info </span>Running Scripts1");
+    QString tecancommand1 = processText().commandStr1;
+    QString tecancommand2 = processText().commandStr2;
+    QString steppercommand = qtProcessString(processText().positionStr);
+
+    send_tecan_command2(tecancommand1);
+    send_tecan_command3(tecancommand2);
+    moveStepper(steppercommand);
+}
+
+
+void MainWindow::on_pushButton_19_clicked()
+{
+    ui->textEdit->setText(QString::fromUtf8(R"(
+
+    // wash PIP
+    $R900U10S12000
+    %2M9000
+    loop
+    %2I5A3000O4A0
+    endloop2
+    $D10L900
+    %2R
+
+)"));
+    QTextBrowser *textBrowser = ui->textBrowser;
+    textBrowser->append("<span style='color: green;'>info </span>Running Scripts1");
+    QString tecancommand1 = processText().commandStr1;
+    QString tecancommand2 = processText().commandStr2;
+    QString steppercommand = qtProcessString(processText().positionStr);
+
+    send_tecan_command2(tecancommand1);
+    send_tecan_command3(tecancommand2);
+    moveStepper(steppercommand);
+}
+
+
+void MainWindow::on_pushButton_22_clicked()
+{
+    ui->textEdit->setText(QString::fromUtf8(R"(
+
+    // wash
+    $R900S12000
+    %1M9000
+    loop
+    %1I5A3000O6A0
+    endloop2
+    $L900
+    %1R
+
+)"));
+    QTextBrowser *textBrowser = ui->textBrowser;
+    textBrowser->append("<span style='color: green;'>info </span>Running Scripts1");
+    QString tecancommand1 = processText().commandStr1;
+    QString tecancommand2 = processText().commandStr2;
+    QString steppercommand = qtProcessString(processText().positionStr);
+
+    send_tecan_command2(tecancommand1);
+    send_tecan_command3(tecancommand2);
+    moveStepper(steppercommand);
+}
+
+
+void MainWindow::on_pushButton_23_clicked()
+{
+    ui->textEdit->setText(QString::fromUtf8(R"(
+
+    // wash
+    $R900S12000
+    %2M9000
+    loop
+    %2I5A3000O6A0
+    endloop2
+    $L900
+    %2R
+
+)"));
+    QTextBrowser *textBrowser = ui->textBrowser;
+    textBrowser->append("<span style='color: green;'>info </span>Running Scripts1");
+    QString tecancommand1 = processText().commandStr1;
+    QString tecancommand2 = processText().commandStr2;
+    QString steppercommand = qtProcessString(processText().positionStr);
+
+    send_tecan_command2(tecancommand1);
+    send_tecan_command3(tecancommand2);
+    moveStepper(steppercommand);
+}
+
+
+void MainWindow::on_pushButton_24_clicked()
+{
+    ui->textEdit->setText(QString::fromUtf8(R"(
+
+    // wash
+    $R900S12000
+    %1M9000
+    loop
+    %1I5A3000O1A0
+    endloop2
+    $L900
+    %1R
+
+)"));
+    QTextBrowser *textBrowser = ui->textBrowser;
+    textBrowser->append("<span style='color: green;'>info </span>Running Scripts1");
+    QString tecancommand1 = processText().commandStr1;
+    QString tecancommand2 = processText().commandStr2;
+    QString steppercommand = qtProcessString(processText().positionStr);
+
+    send_tecan_command2(tecancommand1);
+    send_tecan_command3(tecancommand2);
+    moveStepper(steppercommand);
+}
+
+
+void MainWindow::on_pushButton_25_clicked()
+{
+    ui->textEdit->setText(QString::fromUtf8(R"(
+
+    // wash
+    $R900S12000
+    %1M9000
+    loop
+    %1I5A3000O2A0
+    endloop2
+    $L900
+    %1R
+
+)"));
+    QTextBrowser *textBrowser = ui->textBrowser;
+    textBrowser->append("<span style='color: green;'>info </span>Running Scripts1");
+    QString tecancommand1 = processText().commandStr1;
+    QString tecancommand2 = processText().commandStr2;
+    QString steppercommand = qtProcessString(processText().positionStr);
+
+    send_tecan_command2(tecancommand1);
+    send_tecan_command3(tecancommand2);
+    moveStepper(steppercommand);
+}
+
+
+void MainWindow::on_pushButton_26_clicked()
+{
+    ui->textEdit->setText(QString::fromUtf8(R"(
+
+    // wash
+    $R900S12000
+    %1M9000
+    loop
+    %1I5A3000O3A0
+    endloop2
+    $L900
+    %1R
+
+)"));
+    QTextBrowser *textBrowser = ui->textBrowser;
+    textBrowser->append("<span style='color: green;'>info </span>Running Scripts1");
+    QString tecancommand1 = processText().commandStr1;
+    QString tecancommand2 = processText().commandStr2;
+    QString steppercommand = qtProcessString(processText().positionStr);
+
+    send_tecan_command2(tecancommand1);
+    send_tecan_command3(tecancommand2);
+    moveStepper(steppercommand);
+}
+
+
+void MainWindow::on_pushButton_27_clicked()
+{
+    ui->textEdit->setText(QString::fromUtf8(R"(
+
+    // wash
+    $R900S12000
+    %1M9000
+    loop
+    %1I5A3000O4A0
+    endloop2
+    $L900
+    %1R
+
+)"));
+    QTextBrowser *textBrowser = ui->textBrowser;
+    textBrowser->append("<span style='color: green;'>info </span>Running Scripts1");
+    QString tecancommand1 = processText().commandStr1;
+    QString tecancommand2 = processText().commandStr2;
+    QString steppercommand = qtProcessString(processText().positionStr);
+
+    send_tecan_command2(tecancommand1);
+    send_tecan_command3(tecancommand2);
+    moveStepper(steppercommand);
+}
+
+
+void MainWindow::on_pushButton_31_clicked()
+{
+    ui->textEdit->setText(QString::fromUtf8(R"(
+
+    // wash
+    $R900S12000
+    %2M9000
+    loop
+    %2I5A3000O1A0
+    endloop2
+    $L900
+    %2R
+
+)"));
+    QTextBrowser *textBrowser = ui->textBrowser;
+    textBrowser->append("<span style='color: green;'>info </span>Running Scripts1");
+    QString tecancommand1 = processText().commandStr1;
+    QString tecancommand2 = processText().commandStr2;
+    QString steppercommand = qtProcessString(processText().positionStr);
+
+    send_tecan_command2(tecancommand1);
+    send_tecan_command3(tecancommand2);
+    moveStepper(steppercommand);
+}
+
+
+void MainWindow::on_pushButton_28_clicked()
+{
+    ui->textEdit->setText(QString::fromUtf8(R"(
+
+    // wash
+    $R900S12000
+    %2M9000
+    loop
+    %2I5A3000O2A0
+    endloop2
+    $L900
+    %2R
+
+)"));
+    QTextBrowser *textBrowser = ui->textBrowser;
+    textBrowser->append("<span style='color: green;'>info </span>Running Scripts1");
+    QString tecancommand1 = processText().commandStr1;
+    QString tecancommand2 = processText().commandStr2;
+    QString steppercommand = qtProcessString(processText().positionStr);
+
+    send_tecan_command2(tecancommand1);
+    send_tecan_command3(tecancommand2);
+    moveStepper(steppercommand);
+}
+
+
+void MainWindow::on_pushButton_30_clicked()
+{
+    ui->textEdit->setText(QString::fromUtf8(R"(
+
+    // wash
+    $R900S12000
+    %2M9000
+    loop
+    %2I5A3000O3A0
+    endloop2
+    $L900
+    %2R
+
+)"));
+    QTextBrowser *textBrowser = ui->textBrowser;
+    textBrowser->append("<span style='color: green;'>info </span>Running Scripts1");
+    QString tecancommand1 = processText().commandStr1;
+    QString tecancommand2 = processText().commandStr2;
+    QString steppercommand = qtProcessString(processText().positionStr);
+
+    send_tecan_command2(tecancommand1);
+    send_tecan_command3(tecancommand2);
+    moveStepper(steppercommand);
+}
+
+
+void MainWindow::on_pushButton_29_clicked()
+{
+    ui->textEdit->setText(QString::fromUtf8(R"(
+
+    // wash
+    $R900S12000
+    %2M9000
+    loop
+    %2I5A3000O4A0
+    endloop2
+    $L900
+    %2R
+
+)"));
+    QTextBrowser *textBrowser = ui->textBrowser;
+    textBrowser->append("<span style='color: green;'>info </span>Running Scripts1");
+    QString tecancommand1 = processText().commandStr1;
+    QString tecancommand2 = processText().commandStr2;
+    QString steppercommand = qtProcessString(processText().positionStr);
+
+    send_tecan_command2(tecancommand1);
+    send_tecan_command3(tecancommand2);
+    moveStepper(steppercommand);
+}
+
+
+// A1 sample
+void MainWindow::on_pushButton_32_clicked()
+{
+    ui->textEdit->setText(QString::fromUtf8(R"(
+
+    // wash
+    $R100S6000
+    %1M1000
+    loop
+    %1I5A3000O1A0
+    endloop1
+$L100
+    %1R
+
+)"));
+    QTextBrowser *textBrowser = ui->textBrowser;
+    textBrowser->append("<span style='color: green;'>info </span>Running Scripts1");
+    QString tecancommand1 = processText().commandStr1;
+    QString tecancommand2 = processText().commandStr2;
+    QString steppercommand = qtProcessString(processText().positionStr);
+
+    send_tecan_command2(tecancommand1);
+    send_tecan_command3(tecancommand2);
+    moveStepper(steppercommand);
+}
+
+
+void MainWindow::on_pushButton_34_clicked()
+{
+    ui->textEdit->setText(QString::fromUtf8(R"(
+
+    // wash
+    $R200S6000
+    %1M2000
+loop
+    %1I5A3000O2A0
+endloop1
+    $L200
+    %1R
+
+)"));
+    QTextBrowser *textBrowser = ui->textBrowser;
+    textBrowser->append("<span style='color: green;'>info </span>Running Scripts1");
+    QString tecancommand1 = processText().commandStr1;
+    QString tecancommand2 = processText().commandStr2;
+    QString steppercommand = qtProcessString(processText().positionStr);
+
+    send_tecan_command2(tecancommand1);
+    send_tecan_command3(tecancommand2);
+    moveStepper(steppercommand);
+}
+
+
+void MainWindow::on_pushButton_35_clicked()
+{
+    ui->textEdit->setText(QString::fromUtf8(R"(
+
+    // wash
+    $R300S6000
+    %1M3000
+loop
+    %1I5A3000O3A0
+endloop1
+    $L300
+    %1R
+
+)"));
+    QTextBrowser *textBrowser = ui->textBrowser;
+    textBrowser->append("<span style='color: green;'>info </span>Running Scripts1");
+    QString tecancommand1 = processText().commandStr1;
+    QString tecancommand2 = processText().commandStr2;
+    QString steppercommand = qtProcessString(processText().positionStr);
+
+    send_tecan_command2(tecancommand1);
+    send_tecan_command3(tecancommand2);
+    moveStepper(steppercommand);
+}
+
+
+void MainWindow::on_pushButton_36_clicked()
+{
+    ui->textEdit->setText(QString::fromUtf8(R"(
+
+    // wash
+    $R400S6000
+    %1M4000
+loop
+    %1I5A3000O4A0
+endloop1
+    $L400
+    %1R
+
+)"));
+    QTextBrowser *textBrowser = ui->textBrowser;
+    textBrowser->append("<span style='color: green;'>info </span>Running Scripts1");
+    QString tecancommand1 = processText().commandStr1;
+    QString tecancommand2 = processText().commandStr2;
+    QString steppercommand = qtProcessString(processText().positionStr);
+
+    send_tecan_command2(tecancommand1);
+    send_tecan_command3(tecancommand2);
+    moveStepper(steppercommand);
+}
+
+
+void MainWindow::on_pushButton_33_clicked()
+{
+    ui->textEdit->setText(QString::fromUtf8(R"(
+
+    // wash
+    $R500S6000
+    %2M5000
+loop
+    %2I5A3000O1A0
+endloop1
+    $L500
+    %2R
+
+)"));
+    QTextBrowser *textBrowser = ui->textBrowser;
+    textBrowser->append("<span style='color: green;'>info </span>Running Scripts1");
+    QString tecancommand1 = processText().commandStr1;
+    QString tecancommand2 = processText().commandStr2;
+    QString steppercommand = qtProcessString(processText().positionStr);
+
+    send_tecan_command2(tecancommand1);
+    send_tecan_command3(tecancommand2);
+    moveStepper(steppercommand);
+}
+
+
+void MainWindow::on_pushButton_41_clicked()
+{
+    ui->textEdit->setText(QString::fromUtf8(R"(
+
+    // wash
+    $R600S6000
+    %2M6000
+loop
+    %2I5A3000O2A0
+endloop1
+    $L600
+    %2R
+
+)"));
+    QTextBrowser *textBrowser = ui->textBrowser;
+    textBrowser->append("<span style='color: green;'>info </span>Running Scripts1");
+    QString tecancommand1 = processText().commandStr1;
+    QString tecancommand2 = processText().commandStr2;
+    QString steppercommand = qtProcessString(processText().positionStr);
+
+    send_tecan_command2(tecancommand1);
+    send_tecan_command3(tecancommand2);
+    moveStepper(steppercommand);
+}
+
+
+void MainWindow::on_pushButton_38_clicked()
+{
+    ui->textEdit->setText(QString::fromUtf8(R"(
+
+    // wash
+    $R700S6000
+    %2M7000
+loop
+    %2I5A3000O3A0
+endloop1
+    $L700
+    %2R
+
+)"));
+    QTextBrowser *textBrowser = ui->textBrowser;
+    textBrowser->append("<span style='color: green;'>info </span>Running Scripts1");
+    QString tecancommand1 = processText().commandStr1;
+    QString tecancommand2 = processText().commandStr2;
+    QString steppercommand = qtProcessString(processText().positionStr);
+
+    send_tecan_command2(tecancommand1);
+    send_tecan_command3(tecancommand2);
+    moveStepper(steppercommand);
+}
+
+
+void MainWindow::on_pushButton_40_clicked()
+{
+    ui->textEdit->setText(QString::fromUtf8(R"(
+
+    // wash
+    $R800S6000
+    %2M8000
+loop
+    %2I5A3000O4A0
+endloop1
+    $L800
+    %2R
+
+)"));
+    QTextBrowser *textBrowser = ui->textBrowser;
+    textBrowser->append("<span style='color: green;'>info </span>Running Scripts1");
+    QString tecancommand1 = processText().commandStr1;
+    QString tecancommand2 = processText().commandStr2;
+    QString steppercommand = qtProcessString(processText().positionStr);
+
+    send_tecan_command2(tecancommand1);
+    send_tecan_command3(tecancommand2);
+    moveStepper(steppercommand);
+}
 
