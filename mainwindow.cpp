@@ -2176,7 +2176,7 @@ void MainWindow::on_pushButton_32_clicked()
 
     // wash
     $R32U160S4000
-    %1M200
+    %1M500
     loop
     %1I5A3000O1A0
     endloop1
@@ -2202,7 +2202,7 @@ void MainWindow::on_pushButton_34_clicked()
 
     // wash
     $R64U160S4000
-    %1M400
+    %1M600
 loop
     %1I5A3000O2A0
 endloop1
@@ -2228,7 +2228,7 @@ void MainWindow::on_pushButton_35_clicked()
 
     // wash
     $R96U160S4000
-    %1M600
+    %1M1200
 loop
     %1I5A3000O3A0
 endloop1
@@ -2254,7 +2254,7 @@ void MainWindow::on_pushButton_36_clicked()
 
     // wash
     $R128U160S4000
-    %1M800
+    %1M200
 loop
     %1I5A3000O4A0
 endloop1
@@ -2280,7 +2280,7 @@ void MainWindow::on_pushButton_33_clicked()
 
     // wash
     $R160U160S4000
-    %2M1000
+    %2M3500
 loop
     %2I5A3000O1A0
 endloop1
@@ -2306,7 +2306,7 @@ void MainWindow::on_pushButton_41_clicked()
 
     // wash
     $R192U160S4000
-    %2M6000
+    %2M4000
 loop
     %2I5A3000O2A0
 endloop1
@@ -2332,7 +2332,7 @@ void MainWindow::on_pushButton_38_clicked()
 
     // wash
     $R224U160S4000
-    %2M1400
+    %2M4500
 loop
     %2I5A3000O3A0
 endloop1
@@ -2358,7 +2358,7 @@ void MainWindow::on_pushButton_40_clicked()
 
     // wash
     $R256U160S4000
-    %2M1600
+    %2M5000
 loop
     %2I5A3000O4A0
 endloop1
