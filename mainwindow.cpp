@@ -1619,12 +1619,12 @@ void MainWindow::on_pushButton_7_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R180U150S12000
-    %1M1800
+    $R288U160S9000
+    %1M3000
     loop
     %1I5A3000O6A0
     endloop2
-    $D150L180
+    $D160L288
     %1R
 
 )"));
@@ -1676,12 +1676,12 @@ void MainWindow::on_pushButton_9_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R180U150S12000
-    %2M1800
+    $R288U160S9000
+    %2M3000
     loop
     %2I5A3000O6A0
     endloop2
-    $D150L180
+    $D160L288
     %2R
 
 )"));
@@ -1706,12 +1706,12 @@ void MainWindow::on_pushButton_8_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash PIP
-    $R180U150S12000
-    %1M1800
+    $R288U160S9000
+    %1M3000
     loop
     %1I5A3000O1A0
     endloop2
-    $D150L180
+    $D160L288
     %1R
 
 )"));
@@ -1732,12 +1732,12 @@ void MainWindow::on_pushButton_10_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash PIP
-    $R180U150S12000
-    %1M1800
+    $R288U160S9000
+    %1M3000
     loop
     %1I5A3000O2A0
     endloop2
-    $D150L180
+    $D160L288
     %1R
 
 )"));
@@ -1758,12 +1758,12 @@ void MainWindow::on_pushButton_11_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash PIP
-    $R180U150S12000
-    %1M1800
+    $R288U160S9000
+    %1M3000
     loop
     %1I5A3000O3A0
     endloop2
-    $D150L180
+    $D160L288
     %1R
 
 )"));
@@ -1784,12 +1784,12 @@ void MainWindow::on_pushButton_12_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash PIP
-    $R180U150S12000
-    %1M1800
+    $R288U160S9000
+    %1M3000
     loop
     %1I5A3000O4A0
     endloop2
-    $D150L180
+    $D160L288
     %1R
 
 )"));
@@ -1810,12 +1810,12 @@ void MainWindow::on_pushButton_21_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash PIP
-    $R180U150S12000
-    %2M1800
+    $R288U160S9000
+    %2M3000
     loop
     %2I5A3000O1A0
     endloop2
-    $D150L180
+    $D160L288
     %2R
 
 )"));
@@ -1836,12 +1836,12 @@ void MainWindow::on_pushButton_13_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash PIP
-    $R180U150S12000
-    %2M1800
+    $R288U160S9000
+    %2M3000
     loop
     %2I5A3000O2A0
     endloop2
-    $D150L180
+    $D160L288
     %2R
 
 )"));
@@ -1862,12 +1862,12 @@ void MainWindow::on_pushButton_20_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash PIP
-    $R180U150S12000
-    %2M1800
+    $R288U160S9000
+    %2M3000
     loop
     %2I5A3000O3A0
     endloop2
-    $D150L180
+    $D160L288
     %2R
 
 )"));
@@ -1888,12 +1888,12 @@ void MainWindow::on_pushButton_19_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash PIP
-    $R180U150S12000
-    %2M1800
+    $R288U160S9000
+    %2M3000
     loop
     %2I5A3000O4A0
     endloop2
-    $D150L180
+    $D160L288
     %2R
 
 )"));
@@ -1914,12 +1914,12 @@ void MainWindow::on_pushButton_22_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R180S12000
-    %1M1800
+    $R288S9000
+    %1M3000
     loop
     %1I5A3000O6A0
     endloop2
-    $L180
+    $L288
     %1R
 
 )"));
@@ -1940,12 +1940,12 @@ void MainWindow::on_pushButton_23_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R180S12000
-    %2M1800
+    $R288S9000
+    %2M3000
     loop
     %2I5A3000O6A0
     endloop2
-    $L180
+    $L288
     %2R
 
 )"));
@@ -1966,12 +1966,12 @@ void MainWindow::on_pushButton_24_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R180S12000
-    %1M1800
+    $R288S9000
+    %1M3000
     loop
     %1I5A3000O1A0
     endloop2
-    $L180
+    $L288
     %1R
 
 )"));
@@ -1992,12 +1992,12 @@ void MainWindow::on_pushButton_25_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R180S12000
-    %1M1800
+    $R288S9000
+    %1M3000
     loop
     %1I5A3000O2A0
     endloop2
-    $L180
+    $L288
     %1R
 
 )"));
@@ -2018,12 +2018,12 @@ void MainWindow::on_pushButton_26_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R180S12000
-    %1M1800
+    $R288S9000
+    %1M3000
     loop
     %1I5A3000O3A0
     endloop2
-    $L180
+    $L288
     %1R
 
 )"));
@@ -2044,12 +2044,12 @@ void MainWindow::on_pushButton_27_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R180S12000
-    %1M1800
+    $R288S9000
+    %1M3000
     loop
     %1I5A3000O4A0
     endloop2
-    $L180
+    $L288
     %1R
 
 )"));
@@ -2070,12 +2070,12 @@ void MainWindow::on_pushButton_31_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R180S12000
-    %2M1800
+    $R288S9000
+    %2M3000
     loop
     %2I5A3000O1A0
     endloop2
-    $L180
+    $L288
     %2R
 
 )"));
@@ -2096,12 +2096,12 @@ void MainWindow::on_pushButton_28_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R180S12000
-    %2M1800
+    $R288S9000
+    %2M3000
     loop
     %2I5A3000O2A0
     endloop2
-    $L180
+    $L288
     %2R
 
 )"));
@@ -2122,12 +2122,12 @@ void MainWindow::on_pushButton_30_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R180S12000
-    %2M1800
+    $R288S9000
+    %2M3000
     loop
     %2I5A3000O3A0
     endloop2
-    $L180
+    $L288
     %2R
 
 )"));
@@ -2148,12 +2148,12 @@ void MainWindow::on_pushButton_29_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R180S12000
-    %2M1800
+    $R288S9000
+    %2M3000
     loop
     %2I5A3000O4A0
     endloop2
-    $L180
+    $L288
     %2R
 
 )"));
@@ -2175,12 +2175,12 @@ void MainWindow::on_pushButton_32_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R20U150S6000
+    $R32U160S4000
     %1M200
     loop
     %1I5A3000O1A0
     endloop1
-$D150L20
+$D160L32
     %1R
 
 )"));
@@ -2201,12 +2201,12 @@ void MainWindow::on_pushButton_34_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R40U150S6000
+    $R64U160S4000
     %1M400
 loop
     %1I5A3000O2A0
 endloop1
-    $D150L40
+    $D160L64
     %1R
 
 )"));
@@ -2227,12 +2227,12 @@ void MainWindow::on_pushButton_35_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R60U150S6000
+    $R96U160S4000
     %1M600
 loop
     %1I5A3000O3A0
 endloop1
-    $D150L60
+    $D160L96
     %1R
 
 )"));
@@ -2253,12 +2253,12 @@ void MainWindow::on_pushButton_36_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R80U150S6000
+    $R128U160S4000
     %1M800
 loop
     %1I5A3000O4A0
 endloop1
-    $D150L80
+    $D160L128
     %1R
 
 )"));
@@ -2279,12 +2279,12 @@ void MainWindow::on_pushButton_33_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R100U150S6000
+    $R160U160S4000
     %2M1000
 loop
     %2I5A3000O1A0
 endloop1
-    $D150L100
+    $D160L160
     %2R
 
 )"));
@@ -2305,12 +2305,12 @@ void MainWindow::on_pushButton_41_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R600U150S6000
+    $R192U160S4000
     %2M6000
 loop
     %2I5A3000O2A0
 endloop1
-    $D150L600
+    $D160L192
     %2R
 
 )"));
@@ -2331,12 +2331,12 @@ void MainWindow::on_pushButton_38_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R140U150S6000
+    $R224U160S4000
     %2M1400
 loop
     %2I5A3000O3A0
 endloop1
-    $D150L140
+    $D160L224
     %2R
 
 )"));
@@ -2357,12 +2357,12 @@ void MainWindow::on_pushButton_40_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R160U150S6000
+    $R256U160S4000
     %2M1600
 loop
     %2I5A3000O4A0
 endloop1
-    $D150L160
+    $D160L256
     %2R
 
 )"));

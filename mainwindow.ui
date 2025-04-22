@@ -856,6 +856,15 @@ color: rgb(255, 255, 255);</string>
          <string>sample B2</string>
         </property>
        </widget>
+       <zorder>pushButton_33</zorder>
+       <zorder>pushButton_32</zorder>
+       <zorder>label_29</zorder>
+       <zorder>pushButton_34</zorder>
+       <zorder>pushButton_35</zorder>
+       <zorder>pushButton_36</zorder>
+       <zorder>pushButton_38</zorder>
+       <zorder>pushButton_40</zorder>
+       <zorder>pushButton_41</zorder>
       </widget>
      </widget>
     </widget>
