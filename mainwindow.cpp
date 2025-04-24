@@ -1463,7 +1463,7 @@ void MainWindow::on_pushButton_18_clicked()
 
     // send init parameter
     // 1. 获取输入并转换为 ASCII 字节数组
-    QByteArray bytes2 = intoAscii("Z2S5IR");
+    QByteArray bytes2 = intoAscii("Z2S10IR");
     // 2. 转换为十六进制字符串
     QString hexResult2 = rawDataToHex(bytes2);
 
@@ -1619,11 +1619,11 @@ void MainWindow::on_pushButton_7_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R288U160S9000
-    %1M3000
+    $R288U160S12000
+    %1M6000
     loop
-    %1I5A3000O6A0
-    endloop2
+    %1I5A3000M3000O6A0
+    endloop1
     $D160L288
     %1R
 
@@ -1676,11 +1676,11 @@ void MainWindow::on_pushButton_9_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R288U160S9000
-    %2M3000
+    $R288U160S12000
+    %2M6000
     loop
-    %2I5A3000O6A0
-    endloop2
+    %2I5A3000M3000O6A0
+    endloop1
     $D160L288
     %2R
 
@@ -1706,11 +1706,11 @@ void MainWindow::on_pushButton_8_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash PIP
-    $R288U160S9000
-    %1M3000
+    $R288U160S12000
+    %1M6000
     loop
-    %1I5A3000O1A0
-    endloop2
+    %1I5A3000M3000O1A0
+    endloop1
     $D160L288
     %1R
 
@@ -1732,11 +1732,11 @@ void MainWindow::on_pushButton_10_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash PIP
-    $R288U160S9000
-    %1M3000
+    $R288U160S12000
+    %1M6000
     loop
-    %1I5A3000O2A0
-    endloop2
+    %1I5A3000M3000O2A0
+    endloop1
     $D160L288
     %1R
 
@@ -1758,11 +1758,11 @@ void MainWindow::on_pushButton_11_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash PIP
-    $R288U160S9000
-    %1M3000
+    $R288U160S12000
+    %1M6000
     loop
-    %1I5A3000O3A0
-    endloop2
+    %1I5A3000M3000O3A0
+    endloop1
     $D160L288
     %1R
 
@@ -1784,11 +1784,11 @@ void MainWindow::on_pushButton_12_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash PIP
-    $R288U160S9000
-    %1M3000
+    $R288U160S12000
+    %1M6000
     loop
-    %1I5A3000O4A0
-    endloop2
+    %1I5A3000M3000O4A0
+    endloop1
     $D160L288
     %1R
 
@@ -1810,11 +1810,11 @@ void MainWindow::on_pushButton_21_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash PIP
-    $R288U160S9000
-    %2M3000
+    $R288U160S12000
+    %2M6000
     loop
-    %2I5A3000O1A0
-    endloop2
+    %2I5A3000M3000O1A0
+    endloop1
     $D160L288
     %2R
 
@@ -1836,11 +1836,11 @@ void MainWindow::on_pushButton_13_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash PIP
-    $R288U160S9000
-    %2M3000
+    $R288U160S12000
+    %2M6000
     loop
-    %2I5A3000O2A0
-    endloop2
+    %2I5A3000M3000O2A0
+    endloop1
     $D160L288
     %2R
 
@@ -1862,11 +1862,11 @@ void MainWindow::on_pushButton_20_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash PIP
-    $R288U160S9000
-    %2M3000
+    $R288U160S12000
+    %2M6000
     loop
-    %2I5A3000O3A0
-    endloop2
+    %2I5A3000M3000O3A0
+    endloop1
     $D160L288
     %2R
 
@@ -1888,11 +1888,11 @@ void MainWindow::on_pushButton_19_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash PIP
-    $R288U160S9000
-    %2M3000
+    $R288U160S12000
+    %2M6000
     loop
-    %2I5A3000O4A0
-    endloop2
+    %2I5A3000M3000O4A0
+    endloop1
     $D160L288
     %2R
 
@@ -1914,11 +1914,11 @@ void MainWindow::on_pushButton_22_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R288S9000
-    %1M3000
+    $R288S12000
+    %1M6000
     loop
-    %1I5A3000O6A0
-    endloop2
+    %1I5A3000M3000O6A0
+    endloop1
     $L288
     %1R
 
@@ -1940,11 +1940,11 @@ void MainWindow::on_pushButton_23_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R288S9000
-    %2M3000
+    $R288S12000
+    %2M6000
     loop
-    %2I5A3000O6A0
-    endloop2
+    %2I5A3000M3000O6A0
+    endloop1
     $L288
     %2R
 
@@ -1966,11 +1966,11 @@ void MainWindow::on_pushButton_24_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R288S9000
-    %1M3000
+    $R288S12000
+    %1M6000
     loop
-    %1I5A3000O1A0
-    endloop2
+    %1I5A3000M3000O1A0
+    endloop1
     $L288
     %1R
 
@@ -1992,11 +1992,11 @@ void MainWindow::on_pushButton_25_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R288S9000
-    %1M3000
+    $R288S12000
+    %1M6000
     loop
-    %1I5A3000O2A0
-    endloop2
+    %1I5A3000M3000O2A0
+    endloop1
     $L288
     %1R
 
@@ -2018,11 +2018,11 @@ void MainWindow::on_pushButton_26_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R288S9000
-    %1M3000
+    $R288S12000
+    %1M6000
     loop
-    %1I5A3000O3A0
-    endloop2
+    %1I5A3000M3000O3A0
+    endloop1
     $L288
     %1R
 
@@ -2044,11 +2044,11 @@ void MainWindow::on_pushButton_27_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R288S9000
-    %1M3000
+    $R288S12000
+    %1M6000
     loop
-    %1I5A3000O4A0
-    endloop2
+    %1I5A3000M3000O4A0
+    endloop1
     $L288
     %1R
 
@@ -2070,11 +2070,11 @@ void MainWindow::on_pushButton_31_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R288S9000
-    %2M3000
+    $R288S12000
+    %2M6000
     loop
-    %2I5A3000O1A0
-    endloop2
+    %2I5A3000M3000O1A0
+    endloop1
     $L288
     %2R
 
@@ -2096,11 +2096,11 @@ void MainWindow::on_pushButton_28_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R288S9000
-    %2M3000
+    $R288S12000
+    %2M6000
     loop
-    %2I5A3000O2A0
-    endloop2
+    %2I5A3000M3000O2A0
+    endloop1
     $L288
     %2R
 
@@ -2122,11 +2122,11 @@ void MainWindow::on_pushButton_30_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R288S9000
-    %2M3000
+    $R288S12000
+    %2M6000
     loop
-    %2I5A3000O3A0
-    endloop2
+    %2I5A3000M3000O3A0
+    endloop1
     $L288
     %2R
 
@@ -2148,11 +2148,11 @@ void MainWindow::on_pushButton_29_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R288S9000
-    %2M3000
+    $R288S12000
+    %2M6000
     loop
-    %2I5A3000O4A0
-    endloop2
+    %2I5A3000M3000O4A0
+    endloop1
     $L288
     %2R
 
@@ -2175,10 +2175,10 @@ void MainWindow::on_pushButton_32_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R32U160S4000
-    %1M500
+    $R32U160S7000
+    %1M2000
     loop
-    %1I5A3000O1A0
+    %1I5A1500M3000O1A0
     endloop1
 $D160L32
     %1R
@@ -2201,10 +2201,10 @@ void MainWindow::on_pushButton_34_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R64U160S4000
-    %1M600
+    $R64U160S7000
+    %1M2500
 loop
-    %1I5A3000O2A0
+    %1I5A1500M3000O2A0
 endloop1
     $D160L64
     %1R
@@ -2227,10 +2227,10 @@ void MainWindow::on_pushButton_35_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R96U160S4000
-    %1M1200
+    $R96U160S7000
+    %1M3000
 loop
-    %1I5A3000O3A0
+    %1I5A1500M3000O3A0
 endloop1
     $D160L96
     %1R
@@ -2253,10 +2253,10 @@ void MainWindow::on_pushButton_36_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R128U160S4000
-    %1M200
+    $R128U160S7000
+    %1M3500
 loop
-    %1I5A3000O4A0
+    %1I5A1500M3000O4A0
 endloop1
     $D160L128
     %1R
@@ -2279,10 +2279,10 @@ void MainWindow::on_pushButton_33_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R160U160S4000
-    %2M3500
+    $R160U160S7000
+    %2M4000
 loop
-    %2I5A3000O1A0
+    %2I5A1500M3000O1A0
 endloop1
     $D160L160
     %2R
@@ -2305,10 +2305,10 @@ void MainWindow::on_pushButton_41_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R192U160S4000
-    %2M4000
+    $R192U160S7000
+    %2M4500
 loop
-    %2I5A3000O2A0
+    %2I5A1500M3000O2A0
 endloop1
     $D160L192
     %2R
@@ -2331,10 +2331,10 @@ void MainWindow::on_pushButton_38_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R224U160S4000
-    %2M4500
+    $R224U160S7000
+    %2M5000
 loop
-    %2I5A3000O3A0
+    %2I5A1500M3000O3A0
 endloop1
     $D160L224
     %2R
@@ -2357,10 +2357,10 @@ void MainWindow::on_pushButton_40_clicked()
     ui->textEdit->setText(QString::fromUtf8(R"(
 
     // wash
-    $R256U160S4000
-    %2M5000
+    $R256U160S7000
+    %2M5500
 loop
-    %2I5A3000O4A0
+    %2I5A1500M3000O4A0
 endloop1
     $D160L256
     %2R
